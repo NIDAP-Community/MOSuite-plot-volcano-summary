@@ -1,0 +1,15 @@
+metadata_version: 1
+name: MOSuite - Plot Volcano Summary
+description: |-
+  Create summary volcano plots for each tested contrast in differential expression analysis results. Produces one volcano plot per contrast and returns significant features.
+
+  Multi-Omics Suite provides a suite of functions to clean, filter, batch-correct, normalize, visualize, and perform differential expression analysis. While the package is designed for differential RNA-seq analysis and multi-omics datasets, it can be used for any data represented in a counts table. See the website for more information, documentation, and examples: https://ccbr.github.io/MOSuite/
+tags:
+- MOSuite
+- Bulk RNA-seq
+- visualization
+- Volcano plot
+- Differential expression
+authors:
+- name: Kelly Sovacool
+- name: CCR Collaborative Bioinformatics Resource

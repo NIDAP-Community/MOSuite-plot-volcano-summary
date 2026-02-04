@@ -49,7 +49,7 @@
 		},
 		{
 			"id": "feature_id_colname_id",
-			"category": "7Rr6IxOMDucKMImp",
+			"category": "FvI4Z2eb9sjL47Jt",
 			"name": "Feature ID column name",
 			"param_name": "feature_id_colname",
 			"description": "Column name for feature IDs (gene names, etc). If not provided, uses first column",

@@ -2,5 +2,5 @@
 
 Code Ocean capsule: MOSuite - Plot Volcano Summary
 
-- [Code Ocean Capsule](https://poc-nci.codeocean.io/capsule/9325734/tree)
+- [Code Ocean Capsule](https://poc-nci.codeocean.io/capsule/9325734/tree) | [Latest Release](https://poc-nci.codeocean.io/capsule/6849617/tree/latest)
 - [MOSuite R package docs](https://ccbr.github.io/MOSuite/)

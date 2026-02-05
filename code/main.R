@@ -92,7 +92,7 @@ if (!inherits(moo, 'MOSuite::multiOmicDataSet')) {
 }
 
 # run MOSuite
-plot_volcano_summary(
+summary_dat <- plot_volcano_summary(
     moo,
     feature_id_colname = args$feature_id_colname,
     signif_colname = args$signif_colname,
@@ -134,3 +134,5 @@ plot_volcano_summary(
     aspect_ratio = args$aspect_ratio,
     plot_filename = args$plot_filename
 )
+
+readr::write_csv(summary_dat, file.path(results_dir, 'moo','volcano_summary_data.csv'))

@@ -19,7 +19,6 @@ write_csv(pkg_versions, file.path(results_dir, 'r-packages.csv'))
 # parse CLI arguments
 parser <- ArgumentParser()
 
-parser$add_argument("--regex_moo", type="character", default=".*\\.rds$")
 parser$add_argument("--feature_id_colname", type="character", default=NULL, help="Column name for feature IDs")
 parser$add_argument("--signif_colname", type="character", default="pval", help="Column name of significance values")
 parser$add_argument("--signif_threshold", type="double", default=0.05, help="Significance cutoff for p-values")
@@ -78,11 +77,12 @@ parse_vector_with_default <- function(x, default) {
 }
 
 # validate inputs
+regex_moo <- ".*\\.rds$"
 data_files <- list.files(file.path('../data'), recursive = TRUE, full.names = TRUE)
-moo_files <- Filter(\(x) str_detect(x, regex(args$regex_moo, ignore_case = TRUE)), data_files)
+moo_files <- Filter(\(x) str_detect(x, regex(regex_moo, ignore_case = TRUE)), data_files)
 
 if (length(moo_files) == 0) {
-    stop(glue("No files matching regex: {args$regex_moo}"))
+    stop(glue("No files matching regex: {regex_moo}"))
 }
 moo_filename <- moo_files[1]
 moo <- read_rds(moo_filename)

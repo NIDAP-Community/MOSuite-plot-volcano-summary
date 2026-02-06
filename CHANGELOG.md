@@ -2,6 +2,8 @@
 
 ## development version
 
+- Fix: remove `regex_moo` parameter from configuration. multiOmicDataSet input files are now required to follow the standardized naming pattern (`.*\.rds$`).
+
 ## v2.0
 
 Save summarized dataframe to `results/moo/volcano_summary_data.csv`.

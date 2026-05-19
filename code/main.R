@@ -2,7 +2,7 @@
 rlang::global_entrace()
 library(argparse)
 library(glue)
-library(MOSuite)
+devtools::load_all('/code/MOSuite')
 library(readr)
 library(stringr)
 library(dplyr)

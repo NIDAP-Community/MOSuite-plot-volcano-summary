@@ -63,13 +63,19 @@ expect_outputs_created <- function(results_dir) {
   plot_path <- file.path(results_dir, "figures", "diff", "volcano_summary.png")
   csv_path <- file.path(results_dir, "moo", "volcano_summary_data.csv")
 
-  expect_true(file.exists(plot_path), info = "Volcano summary plot should be created")
+  expect_true(
+    file.exists(plot_path),
+    info = "Volcano summary plot should be created"
+  )
   expect_true(
     file.info(plot_path)$size > 0,
     info = "Volcano summary plot should be non-empty"
   )
 
-  expect_true(file.exists(csv_path), info = "Volcano summary CSV should be created")
+  expect_true(
+    file.exists(csv_path),
+    info = "Volcano summary CSV should be created"
+  )
   expect_true(
     file.info(csv_path)$size > 0,
     info = "Volcano summary CSV should be non-empty"

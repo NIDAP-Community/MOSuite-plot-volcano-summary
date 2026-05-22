@@ -1,6 +1,6 @@
 # Code Ocean capsule - MOSuite - Plot Volcano Summary
 
-## dev version
+## v4.0
 
 - The MOSuite package is now available in `code/MOSuite`. (#1)
 - Use MOSuite v0.3.1.

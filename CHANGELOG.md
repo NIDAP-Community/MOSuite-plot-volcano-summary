@@ -2,7 +2,7 @@
 
 ## Development version
 
-- Improved the Code Ocean parameter UI for the plot volcano summary capsule (#2).
+- Improved the Code Ocean parameter UI for the plot volcano summary capsule (#2, @phoman14).
 
 ## v4.0
 

@@ -102,9 +102,13 @@
 			"name": "Add custom features to labels",
 			"param_name": "add_features",
 			"description": "Add custom_gene_list to default labels",
-			"type": "text",
+			"type": "list",
 			"value_type": "string",
-			"default_value": "FALSE"
+			"default_value": "FALSE",
+			"extra_data": [
+				"TRUE",
+				"FALSE"
+			]
 		},
 		{
 			"id": "label_features_id",
@@ -112,9 +116,13 @@
 			"name": "Label only custom features",
 			"param_name": "label_features",
 			"description": "Label ONLY features from custom_gene_list",
-			"type": "text",
+			"type": "list",
 			"value_type": "string",
-			"default_value": "FALSE"
+			"default_value": "FALSE",
+			"extra_data": [
+				"TRUE",
+				"FALSE"
+			]
 		},
 		{
 			"id": "custom_gene_list_id",
@@ -201,9 +209,13 @@
 			"name": "Displace specific labels",
 			"param_name": "displace_feature_labels",
 			"description": "Displace specific feature labels",
-			"type": "text",
+			"type": "list",
 			"value_type": "string",
-			"default_value": "FALSE"
+			"default_value": "FALSE",
+			"extra_data": [
+				"TRUE",
+				"FALSE"
+			]
 		},
 		{
 			"id": "custom_gene_list_special_label_displacement_id",
@@ -290,9 +302,13 @@
 			"name": "Flip volcano plot",
 			"param_name": "flip_vplot",
 			"description": "Flip fold change values",
-			"type": "text",
+			"type": "list",
 			"value_type": "string",
-			"default_value": "FALSE"
+			"default_value": "FALSE",
+			"extra_data": [
+				"TRUE",
+				"FALSE"
+			]
 		},
 		{
 			"id": "use_default_x_axis_limit_id",
@@ -300,9 +316,13 @@
 			"name": "Use default X-axis limit",
 			"param_name": "use_default_x_axis_limit",
 			"description": "Use default X-axis limit",
-			"type": "text",
+			"type": "list",
 			"value_type": "string",
-			"default_value": "TRUE"
+			"default_value": "TRUE",
+			"extra_data": [
+				"TRUE",
+				"FALSE"
+			]
 		},
 		{
 			"id": "x_axis_limit_id",
@@ -320,9 +340,13 @@
 			"name": "Use default Y-axis limit",
 			"param_name": "use_default_y_axis_limit",
 			"description": "Use default Y-axis limit",
-			"type": "text",
+			"type": "list",
 			"value_type": "string",
-			"default_value": "TRUE"
+			"default_value": "TRUE",
+			"extra_data": [
+				"TRUE",
+				"FALSE"
+			]
 		},
 		{
 			"id": "y_axis_limit_id",
@@ -390,9 +414,13 @@
 			"name": "Use default grid layout",
 			"param_name": "use_default_grid_layout",
 			"description": "Use default grid layout for multiple plots",
-			"type": "text",
+			"type": "list",
 			"value_type": "string",
-			"default_value": "TRUE"
+			"default_value": "TRUE",
+			"extra_data": [
+				"TRUE",
+				"FALSE"
+			]
 		},
 		{
 			"id": "number_of_rows_in_grid_layout_id",

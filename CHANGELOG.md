@@ -1,5 +1,9 @@
 # Code Ocean capsule - MOSuite - Plot Volcano Summary
 
+## Development version
+
+- Improved the Code Ocean parameter UI for the plot volcano summary capsule (#2, @phoman14).
+
 ## v4.0
 
 - The MOSuite package is now available in `code/MOSuite`. (#1)

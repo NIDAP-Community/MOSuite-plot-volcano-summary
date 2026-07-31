@@ -13,117 +13,89 @@
 	],
 	"categories": [
 		{
-			"id": "7Rr6IxOMDucKMImp",
+			"id": "InputDataParameters",
 			"name": "Input Data Parameters",
 			"description": "Options for defining input data",
 			"icon": "📁"
 		},
 		{
-			"id": "EzTg1ivlFDHEy9PI",
+			"id": "Basic",
 			"name": "Basic",
 			"icon": "📂"
 		},
 		{
-			"id": "FvI4Z2eb9sjL47Jt",
+			"id": "Advanced",
 			"name": "Advanced",
-			"description": "Advanced labeling and feature options",
+			"description": "Advanced axis and label options",
 			"icon": "📂"
 		},
 		{
-			"id": "PlotStyling",
-			"name": "Visualization",
+			"id": "VisualizationDEGGroups",
+			"name": "Visualization: DEG Groups",
+			"icon": "📊"
+		},
+		{
+			"id": "VisualizationPlotLabels",
+			"name": "Visualization: Plot Labels",
 			"description": "Visualization and plotting options",
+			"icon": "📊"
+		},
+		{
+			"id": "VisualizationGeneLabels",
+			"name": "Visualization: Gene Labels",
+			"icon": "📊"
+		},
+		{
+			"id": "VisualizationOutput",
+			"name": "Visualization: Output",
 			"icon": "📊"
 		}
 	],
 	"parameters": [
 		{
-			"id": "feature_id_colname_id",
-			"category": "FvI4Z2eb9sjL47Jt",
-			"name": "Feature ID column name",
-			"param_name": "feature_id_colname",
-			"description": "Column name for feature IDs (gene names, etc). If not provided, uses first column",
-			"type": "text",
-			"value_type": "string"
-		},
-		{
 			"id": "signif_colname_id",
-			"category": "EzTg1ivlFDHEy9PI",
+			"category": "Basic",
 			"name": "Significance column name",
 			"param_name": "signif_colname",
-			"description": "Column name of significance values; leave blank to auto-detect",
-			"type": "text",
-			"value_type": "string"
-		},
-		{
-			"id": "change_colname_id",
-			"category": "EzTg1ivlFDHEy9PI",
-			"name": "Fold change column name",
-			"param_name": "change_colname",
-			"description": "Column name of fold change values; leave blank to auto-detect",
+			"description": "Character vector of full significance column names, one per contrast (e.g. c(\"B-A_adjpval\", \"C-A_adjpval\")). Leave blank to auto-detect corresponding columns by checking for _adjpval first, then _pval, for each contrast in change_colname.",
 			"type": "text",
 			"value_type": "string"
 		},
 		{
 			"id": "signif_threshold_id",
-			"category": "EzTg1ivlFDHEy9PI",
+			"category": "Basic",
 			"name": "Significance threshold",
 			"param_name": "signif_threshold",
-			"description": "Significance cutoff for p-values",
+			"description": "Numeric significance threshold used as the p-value or adjusted p-value cutoff. Default: 0.05.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "0.05"
 		},
 		{
+			"id": "change_colname_id",
+			"category": "Basic",
+			"name": "Fold change column name",
+			"param_name": "change_colname",
+			"description": "Character vector of full logFC column names, one per contrast (e.g. c(\"B-A_logFC\", \"C-A_logFC\")). Leave blank to auto-detect all columns ending in _logFC.",
+			"type": "text",
+			"value_type": "string"
+		},
+		{
 			"id": "change_threshold_id",
-			"category": "EzTg1ivlFDHEy9PI",
+			"category": "Basic",
 			"name": "Fold change threshold",
 			"param_name": "change_threshold",
-			"description": "Fold change cutoff for significance (log scale)",
+			"description": "Numeric fold-change cutoff used with change_colname to classify features by fold-change significance.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "1.0"
 		},
 		{
-			"id": "value_to_sort_id",
-			"category": "FvI4Z2eb9sjL47Jt",
-			"name": "Sort output by",
-			"param_name": "value_to_sort_the_output_dataset",
-			"description": "How to sort output: 'p-value', 'fold-change', or 't-statistic'",
-			"type": "text",
-			"value_type": "string",
-			"default_value": "t-statistic"
-		},
-		{
-			"id": "num_features_to_label_id",
-			"category": "FvI4Z2eb9sjL47Jt",
-			"name": "Number of features to label",
-			"param_name": "num_features_to_label",
-			"description": "Number of top features/genes to label",
-			"type": "text",
-			"value_type": "string",
-			"default_value": "20"
-		},
-		{
-			"id": "add_features_id",
-			"category": "FvI4Z2eb9sjL47Jt",
-			"name": "Add custom features to labels",
-			"param_name": "add_features",
-			"description": "Add custom_gene_list to default labels",
-			"type": "list",
-			"value_type": "string",
-			"default_value": "FALSE",
-			"extra_data": [
-				"TRUE",
-				"FALSE"
-			]
-		},
-		{
 			"id": "label_features_id",
-			"category": "FvI4Z2eb9sjL47Jt",
+			"category": "Basic",
 			"name": "Label only custom features",
 			"param_name": "label_features",
-			"description": "Label ONLY features from custom_gene_list",
+			"description": "Select TRUE to label only the specific list of features provided in custom_gene_list. Leave FALSE to add custom_gene_list labels to the automatically selected top features.",
 			"type": "list",
 			"value_type": "string",
 			"default_value": "FALSE",
@@ -134,63 +106,38 @@
 		},
 		{
 			"id": "custom_gene_list_id",
-			"category": "FvI4Z2eb9sjL47Jt",
+			"category": "Basic",
 			"name": "Custom gene/feature list",
 			"param_name": "custom_gene_list",
-			"description": "Comma-separated feature names to label",
+			"description": "Comma-separated list of features to label on the volcano plot. By default, these labels are added to the automatically selected top features; turn on Label only custom features to label only this list.",
 			"type": "text",
 			"value_type": "string"
 		},
 		{
-			"id": "label_significant_features_only_id",
-			"category": "FvI4Z2eb9sjL47Jt",
-			"name": "Label significant features only",
-			"param_name": "label_significant_features_only",
-			"description": "Label only features that meet the significance threshold",
-			"type": "list",
-			"value_type": "string",
-			"default_value": "TRUE",
-			"extra_data": [
-				"TRUE",
-				"FALSE"
-			]
+			"id": "feature_id_colname_id",
+			"category": "Advanced",
+			"name": "Feature ID column name",
+			"param_name": "feature_id_colname",
+			"description": "Column containing feature identifiers, such as gene or protein IDs. If left blank, MOSuite uses the first column of the differential-results table.",
+			"type": "text",
+			"value_type": "string"
 		},
 		{
-			"id": "default_label_color_id",
-			"category": "FvI4Z2eb9sjL47Jt",
-			"name": "Default label color",
-			"param_name": "default_label_color",
-			"description": "Color for default feature labels",
+			"id": "value_to_sort_id",
+			"category": "Advanced",
+			"name": "Sort output by",
+			"param_name": "value_to_sort_the_output_dataset",
+			"description": "How to sort the output dataset and choose top labels. Options are fold-change, p-value, or t-statistic.",
 			"type": "text",
 			"value_type": "string",
-			"default_value": "black"
+			"default_value": "t-statistic"
 		},
 		{
-			"id": "custom_label_color_id",
-			"category": "FvI4Z2eb9sjL47Jt",
-			"name": "Custom label color",
-			"param_name": "custom_label_color",
-			"description": "Color for custom feature labels",
-			"type": "text",
-			"value_type": "string",
-			"default_value": "black"
-		},
-		{
-			"id": "label_font_size_id",
-			"category": "FvI4Z2eb9sjL47Jt",
-			"name": "Label font size",
-			"param_name": "label_font_size",
-			"description": "Font size for labels",
-			"type": "text",
-			"value_type": "string",
-			"default_value": "5"
-		},
-		{
-			"id": "draw_connectors_id",
-			"category": "FvI4Z2eb9sjL47Jt",
-			"name": "Draw label connector lines",
-			"param_name": "draw_connectors",
-			"description": "Draw connector lines from labels to their points",
+			"id": "flip_vplot_id",
+			"category": "Advanced",
+			"name": "Flip volcano plot",
+			"param_name": "flip_vplot",
+			"description": "Set TRUE to flip the fold-change values so the volcano plot looks like the comparison was reversed. Default: FALSE.",
 			"type": "list",
 			"value_type": "string",
 			"default_value": "FALSE",
@@ -200,115 +147,101 @@
 			]
 		},
 		{
-			"id": "change_sig_name_id",
-			"category": "PlotStyling",
-			"name": "Significance label",
-			"param_name": "change_sig_name",
-			"description": "Display name for significance values",
+			"id": "add_deg_columns_id",
+			"category": "Advanced",
+			"name": "Additional DEG columns",
+			"param_name": "add_deg_columns",
+			"description": "Additional columns from the DEG analysis to include in the output dataset. Default: FC, logFC, tstat, pval, adjpval.",
 			"type": "text",
 			"value_type": "string",
-			"default_value": "p-value"
+			"default_value": "FC,logFC,tstat,pval,adjpval"
 		},
 		{
-			"id": "change_lfc_name_id",
-			"category": "PlotStyling",
-			"name": "Fold change label",
-			"param_name": "change_lfc_name",
-			"description": "Display name for fold change values",
+			"id": "point_size_id",
+			"category": "VisualizationDEGGroups",
+			"name": "Point size",
+			"param_name": "point_size",
+			"description": "Size of the points in the plot.",
 			"type": "text",
 			"value_type": "string",
-			"default_value": "log2FC"
-		},
-		{
-			"id": "title_id",
-			"category": "PlotStyling",
-			"name": "Plot title",
-			"param_name": "title",
-			"description": "Plot title",
-			"type": "text",
-			"value_type": "string",
-			"default_value": "Volcano Plots"
-		},
-		{
-			"id": "title_font_size_id",
-			"category": "PlotStyling",
-			"name": "Title font size",
-			"param_name": "title_font_size",
-			"description": "Font size for the plot title",
-			"type": "text",
-			"value_type": "string",
-			"default_value": "24"
-		},
-		{
-			"id": "use_custom_lab_id",
-			"category": "PlotStyling",
-			"name": "Use custom axis labels",
-			"param_name": "use_custom_lab",
-			"description": "Use custom axis labels",
-			"type": "list",
-			"value_type": "string",
-			"default_value": "FALSE",
-			"extra_data": [
-				"TRUE",
-				"FALSE"
-			]
-		},
-		{
-			"id": "color_of_signif_threshold_line_id",
-			"category": "PlotStyling",
-			"name": "Significance threshold line color",
-			"param_name": "color_of_signif_threshold_line",
-			"description": "Color of significance threshold line",
-			"type": "text",
-			"value_type": "string",
-			"default_value": "black"
+			"default_value": "2"
 		},
 		{
 			"id": "color_of_non_significant_features_id",
-			"category": "PlotStyling",
+			"category": "VisualizationDEGGroups",
 			"name": "Non-significant feature color",
 			"param_name": "color_of_non_significant_features",
-			"description": "Color of non-significant features",
+			"description": "Color of non-significant features. Default: grey30.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "grey30"
 		},
 		{
-			"id": "color_of_logfold_change_threshold_line_id",
-			"category": "PlotStyling",
-			"name": "Fold change threshold line color",
-			"param_name": "color_of_logfold_change_threshold_line",
-			"description": "Color of fold change threshold line",
-			"type": "text",
-			"value_type": "string",
-			"default_value": "forestgreen"
-		},
-		{
 			"id": "color_of_features_meeting_only_signif_threshold_id",
-			"category": "PlotStyling",
+			"category": "VisualizationDEGGroups",
 			"name": "Color for significance only",
 			"param_name": "color_of_features_meeting_only_signif_threshold",
-			"description": "Color for features meeting only significance threshold",
+			"description": "Color of features that meet only the significance threshold. Default: royalblue.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "royalblue"
 		},
 		{
 			"id": "color_for_features_meeting_pvalue_and_foldchange_thresholds_id",
-			"category": "PlotStyling",
+			"category": "VisualizationDEGGroups",
 			"name": "Color for both thresholds",
 			"param_name": "color_for_features_meeting_pvalue_and_foldchange_thresholds",
-			"description": "Color for features meeting both p-value and fold change thresholds",
+			"description": "Color of features that meet both the p-value and fold-change thresholds. Default: red2.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "red2"
 		},
 		{
-			"id": "flip_vplot_id",
-			"category": "EzTg1ivlFDHEy9PI",
-			"name": "Flip volcano plot",
-			"param_name": "flip_vplot",
-			"description": "Flip fold change values",
+			"id": "color_of_signif_threshold_line_id",
+			"category": "VisualizationDEGGroups",
+			"name": "Significance threshold line color",
+			"param_name": "color_of_signif_threshold_line",
+			"description": "Color of the significance threshold line. Default: black.",
+			"type": "text",
+			"value_type": "string",
+			"default_value": "black"
+		},
+		{
+			"id": "color_of_logfold_change_threshold_line_id",
+			"category": "VisualizationDEGGroups",
+			"name": "Fold change threshold line color",
+			"param_name": "color_of_logfold_change_threshold_line",
+			"description": "Color of the log fold-change threshold line. Default: forestgreen.",
+			"type": "text",
+			"value_type": "string",
+			"default_value": "forestgreen"
+		},
+		{
+			"id": "title_id",
+			"category": "VisualizationPlotLabels",
+			"name": "Plot title",
+			"param_name": "title",
+			"description": "Title of the plot. Default: Volcano Plots.",
+			"type": "text",
+			"value_type": "string",
+			"default_value": "Volcano Plots"
+		},
+		{
+			"id": "title_font_size_id",
+			"category": "VisualizationPlotLabels",
+			"name": "Title font size",
+			"param_name": "title_font_size",
+			"description": "Size of the plot title. Default: 24.",
+			"type": "text",
+			"value_type": "string",
+			"default_value": "24"
+		},
+		{
+			"id": "use_custom_lab_id",
+			"category": "VisualizationPlotLabels",
+			"name": "Use custom axis labels",
+			"param_name": "use_custom_lab",
+			"description": "If TRUE, use custom labels for the plot axes, set by Significance label and Fold change label.",
 			"type": "list",
 			"value_type": "string",
 			"default_value": "FALSE",
@@ -318,11 +251,51 @@
 			]
 		},
 		{
+			"id": "change_lfc_name_id",
+			"category": "VisualizationPlotLabels",
+			"name": "Fold change label",
+			"param_name": "change_lfc_name",
+			"description": "Name for the fold-change column in the plot. Default is log2FC.",
+			"type": "text",
+			"value_type": "string",
+			"default_value": "log2FC"
+		},
+		{
+			"id": "change_sig_name_id",
+			"category": "VisualizationPlotLabels",
+			"name": "Significance label",
+			"param_name": "change_sig_name",
+			"description": "Name for the significance column in the plot. Default is p-value.",
+			"type": "text",
+			"value_type": "string",
+			"default_value": "p-value"
+		},
+		{
+			"id": "axis_tick_lab_size_id",
+			"category": "VisualizationPlotLabels",
+			"name": "Axis tick label size",
+			"param_name": "axis_tick_lab_size",
+			"description": "Size of the axis tick labels. Default: 16.",
+			"type": "text",
+			"value_type": "string",
+			"default_value": "16"
+		},
+		{
+			"id": "axis_lab_size_id",
+			"category": "VisualizationPlotLabels",
+			"name": "Axis label size",
+			"param_name": "axis_lab_size",
+			"description": "Size of the axis labels. Default: 24.",
+			"type": "text",
+			"value_type": "string",
+			"default_value": "24"
+		},
+		{
 			"id": "use_default_x_axis_limit_id",
-			"category": "PlotStyling",
+			"category": "VisualizationPlotLabels",
 			"name": "Use default X-axis limit",
 			"param_name": "use_default_x_axis_limit",
-			"description": "Use default X-axis limit",
+			"description": "Set TRUE to use the default x-axis limit. Default: TRUE.",
 			"type": "list",
 			"value_type": "string",
 			"default_value": "TRUE",
@@ -333,20 +306,20 @@
 		},
 		{
 			"id": "x_axis_limit_id",
-			"category": "PlotStyling",
+			"category": "VisualizationPlotLabels",
 			"name": "Custom X-axis limit",
 			"param_name": "x_axis_limit",
-			"description": "Custom X-axis limit (used if use_default_x_axis_limit is FALSE)",
+			"description": "Custom x-axis limit used when Use default X-axis limit is FALSE. Default: c(-5, 5).",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "5"
 		},
 		{
 			"id": "use_default_y_axis_limit_id",
-			"category": "PlotStyling",
+			"category": "VisualizationPlotLabels",
 			"name": "Use default Y-axis limit",
 			"param_name": "use_default_y_axis_limit",
-			"description": "Use default Y-axis limit",
+			"description": "Set TRUE to use the default y-axis limit. Default: TRUE.",
 			"type": "list",
 			"value_type": "string",
 			"default_value": "TRUE",
@@ -357,90 +330,128 @@
 		},
 		{
 			"id": "y_axis_limit_id",
-			"category": "PlotStyling",
+			"category": "VisualizationPlotLabels",
 			"name": "Custom Y-axis limit",
 			"param_name": "y_axis_limit",
-			"description": "Custom Y-axis limit (used if use_default_y_axis_limit is FALSE)",
+			"description": "Custom y-axis limit used when Use default Y-axis limit is FALSE. Default: c(0, 10).",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "10"
 		},
 		{
-			"id": "point_size_id",
-			"category": "PlotStyling",
-			"name": "Point size",
-			"param_name": "point_size",
-			"description": "Size of points in plot",
+			"id": "num_features_to_label_id",
+			"category": "VisualizationGeneLabels",
+			"name": "Number of features to label",
+			"param_name": "num_features_to_label",
+			"description": "Number of top features or genes to label in the volcano plot.",
 			"type": "text",
 			"value_type": "string",
-			"default_value": "2"
+			"default_value": "20"
 		},
 		{
-			"id": "axis_lab_size_id",
-			"category": "PlotStyling",
-			"name": "Axis label size",
-			"param_name": "axis_lab_size",
-			"description": "Size of axis labels",
+			"id": "default_label_color_id",
+			"category": "VisualizationGeneLabels",
+			"name": "Default label color",
+			"param_name": "default_label_color",
+			"description": "Color for text used to add feature or gene name labels to points.",
 			"type": "text",
 			"value_type": "string",
-			"default_value": "24"
+			"default_value": "black"
 		},
 		{
-			"id": "axis_tick_lab_size_id",
-			"category": "PlotStyling",
-			"name": "Axis tick label size",
-			"param_name": "axis_tick_lab_size",
-			"description": "Size of axis tick labels",
+			"id": "custom_label_color_id",
+			"category": "VisualizationGeneLabels",
+			"name": "Custom label color",
+			"param_name": "custom_label_color",
+			"description": "Color for the specific list of features provided in the custom gene/feature list parameter.",
 			"type": "text",
 			"value_type": "string",
-			"default_value": "16"
+			"default_value": "black"
 		},
 		{
-			"id": "add_deg_columns_id",
-			"category": "EzTg1ivlFDHEy9PI",
-			"name": "Additional DEG columns",
-			"param_name": "add_deg_columns",
-			"description": "Comma-separated DEG columns to include in output (e.g., FC,logFC,tstat,pval,adjpval)",
+			"id": "label_significant_features_only_id",
+			"category": "VisualizationGeneLabels",
+			"name": "Label significant features only",
+			"param_name": "label_significant_features_only",
+			"description": "If TRUE, automatic labels are selected only from features that pass both the significance and fold-change thresholds.",
+			"type": "list",
+			"value_type": "string",
+			"default_value": "TRUE",
+			"extra_data": [
+				"TRUE",
+				"FALSE"
+			]
+		},
+		{
+			"id": "draw_connectors_id",
+			"category": "VisualizationGeneLabels",
+			"name": "Draw label connector lines",
+			"param_name": "draw_connectors",
+			"description": "If TRUE, draw connector lines from labels to their points and spread labels to reduce overlap.",
+			"type": "list",
+			"value_type": "string",
+			"default_value": "FALSE",
+			"extra_data": [
+				"TRUE",
+				"FALSE"
+			]
+		},
+		{
+			"id": "label_font_size_id",
+			"category": "VisualizationGeneLabels",
+			"name": "Label font size",
+			"param_name": "label_font_size",
+			"description": "Font size of the labels. Default: 7.",
 			"type": "text",
 			"value_type": "string",
-			"default_value": "FC,logFC,tstat,pval,adjpval"
+			"default_value": "5"
 		},
 		{
 			"id": "image_width_id",
-			"category": "PlotStyling",
+			"category": "VisualizationOutput",
 			"name": "Image width",
 			"param_name": "image_width",
-			"description": "Output image width",
-			"type": "text",
-			"value_type": "string",
-			"default_value": "15"
-		},
-		{
-			"id": "image_height_id",
-			"category": "PlotStyling",
-			"name": "Image height",
-			"param_name": "image_height",
-			"description": "Output image height",
+			"description": "Output image width for the saved volcano summary plot.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "15"
 		},
 		{
 			"id": "dpi_id",
-			"category": "PlotStyling",
+			"category": "VisualizationOutput",
 			"name": "DPI",
 			"param_name": "dpi",
-			"description": "Dots per inch of output image",
+			"description": "Dots per inch of the output image.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "300"
 		},
 		{
+			"id": "plot_filename_id",
+			"category": "VisualizationOutput",
+			"name": "Plot filename",
+			"param_name": "plot_filename",
+			"description": "Filename for the output plot. Default: volcano_plot.png in the MOSuite function documentation.",
+			"type": "text",
+			"value_type": "string",
+			"default_value": "volcano_summary.png"
+		},
+		{
+			"id": "image_height_id",
+			"category": "VisualizationOutput",
+			"name": "Image height",
+			"param_name": "image_height",
+			"description": "Output image height for the saved volcano summary plot.",
+			"type": "text",
+			"value_type": "string",
+			"default_value": "15"
+		},
+		{
 			"id": "use_default_grid_layout_id",
-			"category": "PlotStyling",
+			"category": "VisualizationOutput",
 			"name": "Use default grid layout",
 			"param_name": "use_default_grid_layout",
-			"description": "Use default grid layout for multiple plots",
+			"description": "Set TRUE to use the default grid layout. Default: TRUE.",
 			"type": "list",
 			"value_type": "string",
 			"default_value": "TRUE",
@@ -451,23 +462,13 @@
 		},
 		{
 			"id": "number_of_rows_in_grid_layout_id",
-			"category": "PlotStyling",
+			"category": "VisualizationOutput",
 			"name": "Number of rows in grid",
 			"param_name": "number_of_rows_in_grid_layout",
-			"description": "Number of rows in grid layout (used if use_default_grid_layout is FALSE)",
+			"description": "Number of rows in the grid layout. Default: 1.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "1"
-		},
-		{
-			"id": "plot_filename_id",
-			"category": "PlotStyling",
-			"name": "Plot filename",
-			"param_name": "plot_filename",
-			"description": "Plot output filename",
-			"type": "text",
-			"value_type": "string",
-			"default_value": "volcano_summary.png"
 		}
 	],
 	"results": [

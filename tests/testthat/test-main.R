@@ -22,7 +22,6 @@ test_that("summary volcano capsule keeps expected CLI parameter contract", {
     "change_threshold",
     "value_to_sort_the_output_dataset",
     "num_features_to_label",
-    "add_features",
     "label_features",
     "custom_gene_list",
     "label_significant_features_only",
@@ -82,6 +81,9 @@ test_that("summary volcano capsule keeps expected CLI parameter contract", {
   )
   expect_match(main_text, "label_font_size = args\\$label_font_size")
   expect_match(main_text, "draw_connectors = args\\$draw_connectors")
+  expect_match(main_text, "has_custom_gene_list <- nchar\\(trimws\\(args\\$custom_gene_list\\)\\) > 0")
+  expect_match(main_text, "add_features = has_custom_gene_list")
+  expect_false("add_features" %in% extract_main_arguments(main_lines))
   expect_match(main_text, "axis_lab_size = args\\$axis_lab_size")
   expect_match(main_text, "axis_tick_lab_size = args\\$axis_tick_lab_size")
 })
@@ -129,7 +131,6 @@ test_that("Code Ocean panel preserves summary volcano defaults", {
 test_that("Code Ocean boolean controls are TRUE/FALSE lists", {
   panel_lines <- read_repo_file(".codeocean", "app-panel.json")
 
-  expect_boolean_list_parameter(panel_lines, "add_features", "FALSE")
   expect_boolean_list_parameter(panel_lines, "label_features", "FALSE")
   expect_boolean_list_parameter(
     panel_lines,

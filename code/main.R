@@ -56,16 +56,10 @@ parser$add_argument(
   help = "Number of top features to label"
 )
 parser$add_argument(
-  "--add_features",
-  type = "logical",
-  default = FALSE,
-  help = "Add custom_gene_list to labels"
-)
-parser$add_argument(
   "--label_features",
   type = "logical",
   default = FALSE,
-  help = "Label only features from custom_gene_list"
+  help = "Label only features from custom_gene_list; otherwise custom_gene_list labels are added to automatic labels"
 )
 parser$add_argument(
   "--custom_gene_list",
@@ -258,6 +252,7 @@ args <- parser$parse_args()
 
 # load multiOmicDataSet from data directory
 moo <- load_moo_from_data_dir()
+has_custom_gene_list <- nchar(trimws(args$custom_gene_list)) > 0
 
 # run MOSuite
 summary_dat <- plot_volcano_summary(
@@ -269,7 +264,7 @@ summary_dat <- plot_volcano_summary(
   change_threshold = args$change_threshold,
   value_to_sort_the_output_dataset = args$value_to_sort_the_output_dataset,
   num_features_to_label = args$num_features_to_label,
-  add_features = args$add_features,
+  add_features = has_custom_gene_list,
   label_features = args$label_features,
   custom_gene_list = args$custom_gene_list,
   label_significant_features_only = args$label_significant_features_only,

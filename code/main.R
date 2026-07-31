@@ -158,12 +158,6 @@ parser$add_argument(
   help = "Color for features meeting both thresholds"
 )
 parser$add_argument(
-  "--flip_vplot",
-  type = "logical",
-  default = FALSE,
-  help = "Flip fold change values"
-)
-parser$add_argument(
   "--use_default_x_axis_limit",
   type = "logical",
   default = TRUE,
@@ -282,7 +276,7 @@ summary_dat <- plot_volcano_summary(
   color_of_logfold_change_threshold_line = args$color_of_logfold_change_threshold_line,
   color_of_features_meeting_only_signif_threshold = args$color_of_features_meeting_only_signif_threshold,
   color_for_features_meeting_pvalue_and_foldchange_thresholds = args$color_for_features_meeting_pvalue_and_foldchange_thresholds,
-  flip_vplot = args$flip_vplot,
+  flip_vplot = FALSE,
   use_default_x_axis_limit = args$use_default_x_axis_limit,
   x_axis_limit = args$x_axis_limit,
   use_default_y_axis_limit = args$use_default_y_axis_limit,

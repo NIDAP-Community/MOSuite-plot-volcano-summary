@@ -39,7 +39,6 @@ test_that("summary volcano capsule keeps expected CLI parameter contract", {
     "color_of_logfold_change_threshold_line",
     "color_of_features_meeting_only_signif_threshold",
     "color_for_features_meeting_pvalue_and_foldchange_thresholds",
-    "flip_vplot",
     "use_default_x_axis_limit",
     "x_axis_limit",
     "use_default_y_axis_limit",
@@ -84,6 +83,8 @@ test_that("summary volcano capsule keeps expected CLI parameter contract", {
   expect_match(main_text, "has_custom_gene_list <- nchar\\(trimws\\(args\\$custom_gene_list\\)\\) > 0")
   expect_match(main_text, "add_features = has_custom_gene_list")
   expect_false("add_features" %in% extract_main_arguments(main_lines))
+  expect_false("flip_vplot" %in% extract_main_arguments(main_lines))
+  expect_match(main_text, "flip_vplot = FALSE")
   expect_match(main_text, "axis_lab_size = args\\$axis_lab_size")
   expect_match(main_text, "axis_tick_lab_size = args\\$axis_tick_lab_size")
 })
@@ -138,7 +139,6 @@ test_that("Code Ocean boolean controls are TRUE/FALSE lists", {
     "TRUE"
   )
   expect_boolean_list_parameter(panel_lines, "draw_connectors", "FALSE")
-  expect_boolean_list_parameter(panel_lines, "flip_vplot", "FALSE")
   expect_boolean_list_parameter(panel_lines, "use_default_x_axis_limit", "TRUE")
   expect_boolean_list_parameter(panel_lines, "use_default_y_axis_limit", "TRUE")
   expect_boolean_list_parameter(panel_lines, "use_custom_lab", "FALSE")

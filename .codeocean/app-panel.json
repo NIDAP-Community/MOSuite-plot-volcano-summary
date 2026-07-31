@@ -133,20 +133,6 @@
 			"default_value": "t-statistic"
 		},
 		{
-			"id": "flip_vplot_id",
-			"category": "Advanced",
-			"name": "Flip volcano plot",
-			"param_name": "flip_vplot",
-			"description": "Set TRUE to flip the fold-change values so the volcano plot looks like the comparison was reversed. Default: FALSE.",
-			"type": "list",
-			"value_type": "string",
-			"default_value": "FALSE",
-			"extra_data": [
-				"TRUE",
-				"FALSE"
-			]
-		},
-		{
 			"id": "add_deg_columns_id",
 			"category": "Advanced",
 			"name": "Additional DEG columns",
@@ -239,7 +225,7 @@
 		{
 			"id": "use_custom_lab_id",
 			"category": "VisualizationPlotLabels",
-			"name": "Use custom labels",
+			"name": "Use custom axis labels",
 			"param_name": "use_custom_lab",
 			"description": "If TRUE, use the Fold change axis label and Significance axis label values as custom plot column/axis labels. This does not control which genes are labeled.",
 			"type": "list",

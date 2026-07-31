@@ -51,10 +51,18 @@
 			"category": "EzTg1ivlFDHEy9PI",
 			"name": "Significance column name",
 			"param_name": "signif_colname",
-			"description": "Column name of significance values (e.g., pval, adjpval)",
+			"description": "Column name of significance values; leave blank to auto-detect",
 			"type": "text",
-			"value_type": "string",
-			"default_value": "pval"
+			"value_type": "string"
+		},
+		{
+			"id": "change_colname_id",
+			"category": "EzTg1ivlFDHEy9PI",
+			"name": "Fold change column name",
+			"param_name": "change_colname",
+			"description": "Column name of fold change values; leave blank to auto-detect",
+			"type": "text",
+			"value_type": "string"
 		},
 		{
 			"id": "signif_threshold_id",
@@ -94,7 +102,7 @@
 			"description": "Number of top features/genes to label",
 			"type": "text",
 			"value_type": "string",
-			"default_value": "30"
+			"default_value": "20"
 		},
 		{
 			"id": "add_features_id",
@@ -134,6 +142,20 @@
 			"value_type": "string"
 		},
 		{
+			"id": "label_significant_features_only_id",
+			"category": "FvI4Z2eb9sjL47Jt",
+			"name": "Label significant features only",
+			"param_name": "label_significant_features_only",
+			"description": "Label only features that meet the significance threshold",
+			"type": "list",
+			"value_type": "string",
+			"default_value": "TRUE",
+			"extra_data": [
+				"TRUE",
+				"FALSE"
+			]
+		},
+		{
 			"id": "default_label_color_id",
 			"category": "FvI4Z2eb9sjL47Jt",
 			"name": "Default label color",
@@ -151,37 +173,7 @@
 			"description": "Color for custom feature labels",
 			"type": "text",
 			"value_type": "string",
-			"default_value": "green3"
-		},
-		{
-			"id": "label_x_adj_id",
-			"category": "FvI4Z2eb9sjL47Jt",
-			"name": "Label X adjustment",
-			"param_name": "label_x_adj",
-			"description": "X-axis adjustment for labels",
-			"type": "text",
-			"value_type": "string",
-			"default_value": "0.2"
-		},
-		{
-			"id": "label_y_adj_id",
-			"category": "FvI4Z2eb9sjL47Jt",
-			"name": "Label Y adjustment",
-			"param_name": "label_y_adj",
-			"description": "Y-axis adjustment for labels",
-			"type": "text",
-			"value_type": "string",
-			"default_value": "0.2"
-		},
-		{
-			"id": "line_thickness_id",
-			"category": "PlotStyling",
-			"name": "Line thickness",
-			"param_name": "line_thickness",
-			"description": "Thickness of lines in plot",
-			"type": "text",
-			"value_type": "string",
-			"default_value": "0.5"
+			"default_value": "black"
 		},
 		{
 			"id": "label_font_size_id",
@@ -191,24 +183,14 @@
 			"description": "Font size for labels",
 			"type": "text",
 			"value_type": "string",
-			"default_value": "4"
+			"default_value": "5"
 		},
 		{
-			"id": "label_font_type_id",
+			"id": "draw_connectors_id",
 			"category": "FvI4Z2eb9sjL47Jt",
-			"name": "Label font type",
-			"param_name": "label_font_type",
-			"description": "Font type for labels",
-			"type": "text",
-			"value_type": "string",
-			"default_value": "1"
-		},
-		{
-			"id": "displace_feature_labels_id",
-			"category": "FvI4Z2eb9sjL47Jt",
-			"name": "Displace specific labels",
-			"param_name": "displace_feature_labels",
-			"description": "Displace specific feature labels",
+			"name": "Draw label connector lines",
+			"param_name": "draw_connectors",
+			"description": "Draw connector lines from labels to their points",
 			"type": "list",
 			"value_type": "string",
 			"default_value": "FALSE",
@@ -218,33 +200,58 @@
 			]
 		},
 		{
-			"id": "custom_gene_list_special_label_displacement_id",
-			"category": "FvI4Z2eb9sjL47Jt",
-			"name": "Features for special displacement",
-			"param_name": "custom_gene_list_special_label_displacement",
-			"description": "Comma-separated features for special label displacement",
-			"type": "text",
-			"value_type": "string"
-		},
-		{
-			"id": "special_label_displacement_x_axis_id",
-			"category": "FvI4Z2eb9sjL47Jt",
-			"name": "Special label X displacement",
-			"param_name": "special_label_displacement_x_axis",
-			"description": "X displacement for special labels",
+			"id": "change_sig_name_id",
+			"category": "PlotStyling",
+			"name": "Significance label",
+			"param_name": "change_sig_name",
+			"description": "Display name for significance values",
 			"type": "text",
 			"value_type": "string",
-			"default_value": "2"
+			"default_value": "p-value"
 		},
 		{
-			"id": "special_label_displacement_y_axis_id",
-			"category": "FvI4Z2eb9sjL47Jt",
-			"name": "Special label Y displacement",
-			"param_name": "special_label_displacement_y_axis",
-			"description": "Y displacement for special labels",
+			"id": "change_lfc_name_id",
+			"category": "PlotStyling",
+			"name": "Fold change label",
+			"param_name": "change_lfc_name",
+			"description": "Display name for fold change values",
 			"type": "text",
 			"value_type": "string",
-			"default_value": "2"
+			"default_value": "log2FC"
+		},
+		{
+			"id": "title_id",
+			"category": "PlotStyling",
+			"name": "Plot title",
+			"param_name": "title",
+			"description": "Plot title",
+			"type": "text",
+			"value_type": "string",
+			"default_value": "Volcano Plots"
+		},
+		{
+			"id": "title_font_size_id",
+			"category": "PlotStyling",
+			"name": "Title font size",
+			"param_name": "title_font_size",
+			"description": "Font size for the plot title",
+			"type": "text",
+			"value_type": "string",
+			"default_value": "24"
+		},
+		{
+			"id": "use_custom_lab_id",
+			"category": "PlotStyling",
+			"name": "Use custom axis labels",
+			"param_name": "use_custom_lab",
+			"description": "Use custom axis labels",
+			"type": "list",
+			"value_type": "string",
+			"default_value": "FALSE",
+			"extra_data": [
+				"TRUE",
+				"FALSE"
+			]
 		},
 		{
 			"id": "color_of_signif_threshold_line_id",
@@ -254,7 +261,7 @@
 			"description": "Color of significance threshold line",
 			"type": "text",
 			"value_type": "string",
-			"default_value": "blue"
+			"default_value": "black"
 		},
 		{
 			"id": "color_of_non_significant_features_id",
@@ -264,7 +271,7 @@
 			"description": "Color of non-significant features",
 			"type": "text",
 			"value_type": "string",
-			"default_value": "black"
+			"default_value": "grey30"
 		},
 		{
 			"id": "color_of_logfold_change_threshold_line_id",
@@ -274,7 +281,7 @@
 			"description": "Color of fold change threshold line",
 			"type": "text",
 			"value_type": "string",
-			"default_value": "red"
+			"default_value": "forestgreen"
 		},
 		{
 			"id": "color_of_features_meeting_only_signif_threshold_id",
@@ -284,7 +291,7 @@
 			"description": "Color for features meeting only significance threshold",
 			"type": "text",
 			"value_type": "string",
-			"default_value": "lightgoldenrod2"
+			"default_value": "royalblue"
 		},
 		{
 			"id": "color_for_features_meeting_pvalue_and_foldchange_thresholds_id",
@@ -294,7 +301,7 @@
 			"description": "Color for features meeting both p-value and fold change thresholds",
 			"type": "text",
 			"value_type": "string",
-			"default_value": "red"
+			"default_value": "red2"
 		},
 		{
 			"id": "flip_vplot_id",
@@ -369,6 +376,26 @@
 			"default_value": "2"
 		},
 		{
+			"id": "axis_lab_size_id",
+			"category": "PlotStyling",
+			"name": "Axis label size",
+			"param_name": "axis_lab_size",
+			"description": "Size of axis labels",
+			"type": "text",
+			"value_type": "string",
+			"default_value": "24"
+		},
+		{
+			"id": "axis_tick_lab_size_id",
+			"category": "PlotStyling",
+			"name": "Axis tick label size",
+			"param_name": "axis_tick_lab_size",
+			"description": "Size of axis tick labels",
+			"type": "text",
+			"value_type": "string",
+			"default_value": "16"
+		},
+		{
 			"id": "add_deg_columns_id",
 			"category": "EzTg1ivlFDHEy9PI",
 			"name": "Additional DEG columns",
@@ -431,16 +458,6 @@
 			"type": "text",
 			"value_type": "string",
 			"default_value": "1"
-		},
-		{
-			"id": "aspect_ratio_id",
-			"category": "PlotStyling",
-			"name": "Aspect ratio",
-			"param_name": "aspect_ratio",
-			"description": "Aspect ratio of plot (0 = no fixed aspect ratio)",
-			"type": "text",
-			"value_type": "string",
-			"default_value": "0"
 		},
 		{
 			"id": "plot_filename_id",

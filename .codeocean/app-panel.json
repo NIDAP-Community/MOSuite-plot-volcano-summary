@@ -167,54 +167,54 @@
 			"default_value": "2"
 		},
 		{
-			"id": "color_of_non_significant_features_id",
+			"id": "color_for_features_meeting_pvalue_and_foldchange_thresholds_id",
 			"category": "VisualizationDEGGroups",
-			"name": "Non-significant feature color",
-			"param_name": "color_of_non_significant_features",
-			"description": "Color of non-significant features. Default: grey30.",
+			"name": "Significance and fold change feature color",
+			"param_name": "color_for_features_meeting_pvalue_and_foldchange_thresholds",
+			"description": "Color for features that meet both the p-value or adjusted p-value threshold and the fold-change threshold.",
 			"type": "text",
 			"value_type": "string",
-			"default_value": "grey30"
+			"default_value": "red2"
+		},
+		{
+			"id": "color_of_logfold_change_threshold_line_id",
+			"category": "VisualizationDEGGroups",
+			"name": "Fold change only threshold color",
+			"param_name": "color_of_logfold_change_threshold_line",
+			"description": "Color for features that meet only the log fold-change threshold and do not meet the significance threshold.",
+			"type": "text",
+			"value_type": "string",
+			"default_value": "forestgreen"
 		},
 		{
 			"id": "color_of_features_meeting_only_signif_threshold_id",
 			"category": "VisualizationDEGGroups",
-			"name": "Color for significance only",
+			"name": "Significance-only feature color",
 			"param_name": "color_of_features_meeting_only_signif_threshold",
-			"description": "Color of features that meet only the significance threshold. Default: royalblue.",
+			"description": "Color for features that meet the p-value or adjusted p-value threshold but do not meet the fold-change threshold.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "royalblue"
 		},
 		{
-			"id": "color_for_features_meeting_pvalue_and_foldchange_thresholds_id",
+			"id": "color_of_non_significant_features_id",
 			"category": "VisualizationDEGGroups",
-			"name": "Color for both thresholds",
-			"param_name": "color_for_features_meeting_pvalue_and_foldchange_thresholds",
-			"description": "Color of features that meet both the p-value and fold-change thresholds. Default: red2.",
+			"name": "Non-significant feature color",
+			"param_name": "color_of_non_significant_features",
+			"description": "Color for features that do not meet either the significance threshold or the fold-change threshold.",
 			"type": "text",
 			"value_type": "string",
-			"default_value": "red2"
+			"default_value": "grey30"
 		},
 		{
 			"id": "color_of_signif_threshold_line_id",
 			"category": "VisualizationDEGGroups",
 			"name": "Significance threshold line color",
 			"param_name": "color_of_signif_threshold_line",
-			"description": "Color of the significance threshold line. Default: black.",
+			"description": "Color of the significance cutoff lines drawn on the volcano plot.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "black"
-		},
-		{
-			"id": "color_of_logfold_change_threshold_line_id",
-			"category": "VisualizationDEGGroups",
-			"name": "Fold change threshold line color",
-			"param_name": "color_of_logfold_change_threshold_line",
-			"description": "Color of the log fold-change threshold line. Default: forestgreen.",
-			"type": "text",
-			"value_type": "string",
-			"default_value": "forestgreen"
 		},
 		{
 			"id": "title_id",

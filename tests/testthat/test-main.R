@@ -80,7 +80,10 @@ test_that("summary volcano capsule keeps expected CLI parameter contract", {
   )
   expect_match(main_text, "label_font_size = args\\$label_font_size")
   expect_match(main_text, "draw_connectors = args\\$draw_connectors")
-  expect_match(main_text, "has_custom_gene_list <- nchar\\(trimws\\(args\\$custom_gene_list\\)\\) > 0")
+  expect_match(
+    main_text,
+    "has_custom_gene_list <- nchar\\(trimws\\(args\\$custom_gene_list\\)\\) > 0"
+  )
   expect_match(main_text, "add_features = has_custom_gene_list")
   expect_false("add_features" %in% extract_main_arguments(main_lines))
   expect_false("flip_vplot" %in% extract_main_arguments(main_lines))
@@ -103,21 +106,33 @@ test_that("Code Ocean panel preserves summary volcano defaults", {
     "20"
   )
   expect_equal(extract_panel_default(panel_lines, "label_font_size"), "5")
-  expect_equal(extract_panel_default(panel_lines, "custom_label_color"), "black")
+  expect_equal(
+    extract_panel_default(panel_lines, "custom_label_color"),
+    "black"
+  )
   expect_equal(
     extract_panel_default(panel_lines, "color_of_non_significant_features"),
     "grey30"
   )
   expect_equal(
-    extract_panel_default(panel_lines, "color_of_logfold_change_threshold_line"),
+    extract_panel_default(
+      panel_lines,
+      "color_of_logfold_change_threshold_line"
+    ),
     "forestgreen"
   )
   expect_equal(
-    extract_panel_default(panel_lines, "color_of_features_meeting_only_signif_threshold"),
+    extract_panel_default(
+      panel_lines,
+      "color_of_features_meeting_only_signif_threshold"
+    ),
     "royalblue"
   )
   expect_equal(
-    extract_panel_default(panel_lines, "color_for_features_meeting_pvalue_and_foldchange_thresholds"),
+    extract_panel_default(
+      panel_lines,
+      "color_for_features_meeting_pvalue_and_foldchange_thresholds"
+    ),
     "red2"
   )
   expect_equal(extract_panel_default(panel_lines, "axis_lab_size"), "24")

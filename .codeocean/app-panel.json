@@ -55,9 +55,9 @@
 		{
 			"id": "signif_colname_id",
 			"category": "Basic",
-			"name": "Significance column name",
+			"name": "Significance column names",
 			"param_name": "signif_colname",
-			"description": "Character vector of full significance column names, one per contrast (e.g. c(\"B-A_adjpval\", \"C-A_adjpval\")). Leave blank to auto-detect corresponding columns by checking for _adjpval first, then _pval, for each contrast in change_colname.",
+			"description": "Comma-separated significance column names, one per contrast. If left blank in the MOSuite function, matching columns are auto-detected by checking for _adjpval first, then _pval, for each fold-change contrast. Example: B-A_adjpval,B-C_adjpval.",
 			"type": "text",
 			"value_type": "string"
 		},
@@ -66,7 +66,7 @@
 			"category": "Basic",
 			"name": "Significance threshold",
 			"param_name": "signif_threshold",
-			"description": "Numeric significance threshold used as the p-value or adjusted p-value cutoff. Default: 0.05.",
+			"description": "Numeric significance threshold used as the p-value or adjusted p-value cutoff for identifying significant features. Default is 0.05.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "0.05"
@@ -74,9 +74,9 @@
 		{
 			"id": "change_colname_id",
 			"category": "Basic",
-			"name": "Fold change column name",
+			"name": "Fold change column names",
 			"param_name": "change_colname",
-			"description": "Character vector of full logFC column names, one per contrast (e.g. c(\"B-A_logFC\", \"C-A_logFC\")). Leave blank to auto-detect all columns ending in _logFC.",
+			"description": "Comma-separated log fold-change column names, one per contrast. If left blank in the MOSuite function, all columns ending in _logFC are auto-detected. Example: B-A_logFC,B-C_logFC.",
 			"type": "text",
 			"value_type": "string"
 		},
@@ -85,7 +85,7 @@
 			"category": "Basic",
 			"name": "Fold change threshold",
 			"param_name": "change_threshold",
-			"description": "Numeric fold-change cutoff used with change_colname to classify features by fold-change significance.",
+			"description": "Numeric fold-change cutoff used with the selected fold-change column to classify features. Features meeting both this cutoff and the significance threshold are treated as significant by both criteria.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "1.0"
@@ -93,9 +93,9 @@
 		{
 			"id": "label_features_id",
 			"category": "Basic",
-			"name": "Label only custom features",
+			"name": "Label selected features only",
 			"param_name": "label_features",
-			"description": "Select TRUE to label only the specific list of features provided in custom_gene_list. Leave FALSE to add custom_gene_list labels to the automatically selected top features.",
+			"description": "If TRUE, label only the features listed in Custom gene list and ignore the automatically selected top features.",
 			"type": "list",
 			"value_type": "string",
 			"default_value": "FALSE",
@@ -107,9 +107,9 @@
 		{
 			"id": "custom_gene_list_id",
 			"category": "Basic",
-			"name": "Custom gene/feature list",
+			"name": "Custom gene list",
 			"param_name": "custom_gene_list",
-			"description": "Comma-separated list of features to label on the volcano plot. By default, these labels are added to the automatically selected top features; turn on Label only custom features to label only this list.",
+			"description": "Comma-separated feature names or IDs to include as custom volcano-plot labels. When Label selected features only is FALSE, these labels are added to the automatically selected labels.",
 			"type": "text",
 			"value_type": "string"
 		},
@@ -127,7 +127,7 @@
 			"category": "Advanced",
 			"name": "Sort output by",
 			"param_name": "value_to_sort_the_output_dataset",
-			"description": "How to sort the output dataset and choose top labels. Options are fold-change, p-value, or t-statistic.",
+			"description": "How to sort the output dataset and select top automatic labels. Options are 'fold-change', 'p-value', or 't-statistic'.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "t-statistic"
@@ -161,7 +161,7 @@
 			"category": "VisualizationDEGGroups",
 			"name": "Point size",
 			"param_name": "point_size",
-			"description": "Size of the points in the plot.",
+			"description": "Size of the volcano-plot points passed to EnhancedVolcano.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "2"
@@ -221,7 +221,7 @@
 			"category": "VisualizationPlotLabels",
 			"name": "Plot title",
 			"param_name": "title",
-			"description": "Title of the plot. Default: Volcano Plots.",
+			"description": "Title for the volcano plot. The MOSuite default is 'Volcano Plots'; when left at the default, each plot title is derived from the contrast name.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "Volcano Plots"
@@ -231,7 +231,7 @@
 			"category": "VisualizationPlotLabels",
 			"name": "Title font size",
 			"param_name": "title_font_size",
-			"description": "Size of the plot title. Default: 24.",
+			"description": "Font size for the volcano-plot title.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "24"
@@ -239,9 +239,9 @@
 		{
 			"id": "use_custom_lab_id",
 			"category": "VisualizationPlotLabels",
-			"name": "Use custom axis labels",
+			"name": "Use custom labels",
 			"param_name": "use_custom_lab",
-			"description": "If TRUE, use custom labels for the plot axes, set by Significance label and Fold change label.",
+			"description": "If TRUE, use the Fold change axis label and Significance axis label values as custom plot column/axis labels. This does not control which genes are labeled.",
 			"type": "list",
 			"value_type": "string",
 			"default_value": "FALSE",
@@ -253,9 +253,9 @@
 		{
 			"id": "change_lfc_name_id",
 			"category": "VisualizationPlotLabels",
-			"name": "Fold change label",
+			"name": "Fold change axis label",
 			"param_name": "change_lfc_name",
-			"description": "Name for the fold-change column in the plot. Default is log2FC.",
+			"description": "Custom display name for the fold-change column in the plot when Use custom labels is TRUE. Default is 'log2FC'.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "log2FC"
@@ -263,9 +263,9 @@
 		{
 			"id": "change_sig_name_id",
 			"category": "VisualizationPlotLabels",
-			"name": "Significance label",
+			"name": "Significance axis label",
 			"param_name": "change_sig_name",
-			"description": "Name for the significance column in the plot. Default is p-value.",
+			"description": "Custom display name for the significance column in the plot when Use custom labels is TRUE. Default is 'p-value'.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "p-value"
@@ -275,7 +275,7 @@
 			"category": "VisualizationPlotLabels",
 			"name": "Axis tick label size",
 			"param_name": "axis_tick_lab_size",
-			"description": "Size of the axis tick labels. Default: 16.",
+			"description": "Font size for the numeric tick labels on the x and y axes.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "16"
@@ -285,7 +285,7 @@
 			"category": "VisualizationPlotLabels",
 			"name": "Axis label size",
 			"param_name": "axis_lab_size",
-			"description": "Size of the axis labels. Default: 24.",
+			"description": "Font size for the x-axis and y-axis labels.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "24"
@@ -295,7 +295,7 @@
 			"category": "VisualizationPlotLabels",
 			"name": "Use default X-axis limit",
 			"param_name": "use_default_x_axis_limit",
-			"description": "Set TRUE to use the default x-axis limit. Default: TRUE.",
+			"description": "If TRUE, let MOSuite choose the x-axis limits from the fold-change data. If FALSE, use X-axis limit.",
 			"type": "list",
 			"value_type": "string",
 			"default_value": "TRUE",
@@ -307,9 +307,9 @@
 		{
 			"id": "x_axis_limit_id",
 			"category": "VisualizationPlotLabels",
-			"name": "Custom X-axis limit",
+			"name": "X-axis limit",
 			"param_name": "x_axis_limit",
-			"description": "Custom x-axis limit used when Use default X-axis limit is FALSE. Default: c(-5, 5).",
+			"description": "Custom x-axis limit used when Use default X-axis limit is FALSE. A single value is applied symmetrically as -value to +value; two comma-separated values are treated as lower and upper limits.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "5"
@@ -319,7 +319,7 @@
 			"category": "VisualizationPlotLabels",
 			"name": "Use default Y-axis limit",
 			"param_name": "use_default_y_axis_limit",
-			"description": "Set TRUE to use the default y-axis limit. Default: TRUE.",
+			"description": "If TRUE, let MOSuite choose the y-axis limit from the significance values. If FALSE, use Y-axis limit.",
 			"type": "list",
 			"value_type": "string",
 			"default_value": "TRUE",
@@ -331,9 +331,9 @@
 		{
 			"id": "y_axis_limit_id",
 			"category": "VisualizationPlotLabels",
-			"name": "Custom Y-axis limit",
+			"name": "Y-axis limit",
 			"param_name": "y_axis_limit",
-			"description": "Custom y-axis limit used when Use default Y-axis limit is FALSE. Default: c(0, 10).",
+			"description": "Custom upper y-axis limit used when Use default Y-axis limit is FALSE.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "10"
@@ -343,7 +343,7 @@
 			"category": "VisualizationGeneLabels",
 			"name": "Number of features to label",
 			"param_name": "num_features_to_label",
-			"description": "Number of top features or genes to label in the volcano plot.",
+			"description": "Number of top features or genes to label automatically in the volcano plot after sorting. Default in MOSuite is 20.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "20"
@@ -353,7 +353,7 @@
 			"category": "VisualizationGeneLabels",
 			"name": "Default label color",
 			"param_name": "default_label_color",
-			"description": "Color for text used to add feature or gene name labels to points.",
+			"description": "Color for text labels added to automatically selected feature points.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "black"
@@ -363,7 +363,7 @@
 			"category": "VisualizationGeneLabels",
 			"name": "Custom label color",
 			"param_name": "custom_label_color",
-			"description": "Color for the specific list of features provided in the custom gene/feature list parameter.",
+			"description": "Color for labels that come from Custom gene list.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "black"
@@ -373,7 +373,7 @@
 			"category": "VisualizationGeneLabels",
 			"name": "Label significant features only",
 			"param_name": "label_significant_features_only",
-			"description": "If TRUE, automatic labels are selected only from features that pass both the significance and fold-change thresholds.",
+			"description": "If TRUE, automatic labels are selected only from features that pass both the significance threshold and the fold-change threshold.",
 			"type": "list",
 			"value_type": "string",
 			"default_value": "TRUE",
@@ -401,7 +401,7 @@
 			"category": "VisualizationGeneLabels",
 			"name": "Label font size",
 			"param_name": "label_font_size",
-			"description": "Font size of the labels. Default: 5.",
+			"description": "Font size for feature labels in the volcano plot.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "5"
@@ -409,9 +409,9 @@
 		{
 			"id": "image_width_id",
 			"category": "VisualizationOutput",
-			"name": "Image width",
+			"name": "Image width (pixels)",
 			"param_name": "image_width",
-			"description": "Output image width for the saved volcano summary plot.",
+			"description": "Output image width in pixels. Used only when plots are saved to files.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "15"
@@ -421,7 +421,7 @@
 			"category": "VisualizationOutput",
 			"name": "DPI",
 			"param_name": "dpi",
-			"description": "Dots per inch of the output image.",
+			"description": "Dots per inch for saved output images, passed to ggsave. Used only when plots are saved to files.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "300"
@@ -431,7 +431,7 @@
 			"category": "VisualizationOutput",
 			"name": "Plot filename",
 			"param_name": "plot_filename",
-			"description": "Filename for the output plot. Default: volcano_plot.png in the MOSuite function documentation.",
+			"description": "Filename for saved volcano plot output. When multiple comparisons are saved separately, the comparison name is appended before the file extension.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "volcano_summary.png"
@@ -439,9 +439,9 @@
 		{
 			"id": "image_height_id",
 			"category": "VisualizationOutput",
-			"name": "Image height",
+			"name": "Image height (pixels)",
 			"param_name": "image_height",
-			"description": "Output image height for the saved volcano summary plot.",
+			"description": "Output image height in pixels. Used only when plots are saved to files.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "15"

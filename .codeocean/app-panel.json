@@ -401,7 +401,7 @@
 			"category": "VisualizationGeneLabels",
 			"name": "Label font size",
 			"param_name": "label_font_size",
-			"description": "Font size of the labels. Default: 7.",
+			"description": "Font size of the labels. Default: 5.",
 			"type": "text",
 			"value_type": "string",
 			"default_value": "5"

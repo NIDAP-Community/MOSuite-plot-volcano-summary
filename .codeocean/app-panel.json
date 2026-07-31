@@ -86,7 +86,7 @@
 		},
 		{
 			"id": "value_to_sort_id",
-			"category": "EzTg1ivlFDHEy9PI",
+			"category": "FvI4Z2eb9sjL47Jt",
 			"name": "Sort output by",
 			"param_name": "value_to_sort_the_output_dataset",
 			"description": "How to sort output: 'p-value', 'fold-change', or 't-statistic'",

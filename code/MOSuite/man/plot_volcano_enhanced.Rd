@@ -25,8 +25,6 @@ plot_volcano_enhanced(
   use_custom_lab = FALSE,
   ylim = 0,
   custom_xlim = "",
-  xlim_additional = 0,
-  ylim_additional = 0,
   axis_lab_size = 24,
   point_size = 2,
   image_width = 3000,
@@ -59,8 +57,6 @@ plot_volcano_enhanced(
   use_custom_lab = FALSE,
   ylim = 0,
   custom_xlim = "",
-  xlim_additional = 0,
-  ylim_additional = 0,
   axis_lab_size = 24,
   point_size = 2,
   image_width = 3000,
@@ -93,8 +89,6 @@ plot_volcano_enhanced(
   use_custom_lab = FALSE,
   ylim = 0,
   custom_xlim = "",
-  xlim_additional = 0,
-  ylim_additional = 0,
   axis_lab_size = 24,
   point_size = 2,
   image_width = 3000,
@@ -150,10 +144,6 @@ for labeling in the volcano plot, ignoring the top features.}
 \item{ylim}{Y-axis limits for the plot.}
 
 \item{custom_xlim}{Custom X-axis limits for the plot.}
-
-\item{xlim_additional}{Additional space to add to the X-axis limits.}
-
-\item{ylim_additional}{Additional space to add to the Y-axis limits.}
 
 \item{axis_lab_size}{Size of the axis labels.}
 

@@ -291,8 +291,6 @@
         {"Use_Custom_Axis_Label": "use_custom_axis_label"},
         {"Y_Limit": "y_limit"},
         {"Custom_X_axis_limits": "custom_x_axis_limits"},
-        {"X_Limit_Padding": "x_limit_padding"},
-        {"Y_Limit_Padding": "y_limit_padding"},
         {"Axis_Label_Size": "axis_label_size"},
         {"Point_Size": "point_size"}
       ],

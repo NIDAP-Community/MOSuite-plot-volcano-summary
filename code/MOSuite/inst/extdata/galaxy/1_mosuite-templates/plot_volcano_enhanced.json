@@ -221,30 +221,6 @@
             "objectPropertyReference": null
         },
         {
-            "key": "xlim_additional",
-            "displayName": "X-Limit Padding",
-            "description": "Add additional units to x-limit",
-            "paramType": "NUMBER",
-            "paramGroup": "Plot",
-            "paramValues": null,
-            "defaultValue": "0",
-            "condition": null,
-            "content": null,
-            "objectPropertyReference": null
-        },
-        {
-            "key": "ylim_additional",
-            "displayName": "Y-Limit Padding",
-            "description": "Adds additional units to y-limit.",
-            "paramType": "NUMBER",
-            "paramGroup": "Plot",
-            "paramValues": null,
-            "defaultValue": "0",
-            "condition": null,
-            "content": null,
-            "objectPropertyReference": null
-        },
-        {
             "key": "axis_lab_size",
             "displayName": "Axis Label Size",
             "description": "",

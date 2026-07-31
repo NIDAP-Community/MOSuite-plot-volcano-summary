@@ -220,30 +220,6 @@
       "objectPropertyReference": null
     },
     {
-      "key": "xlim_additional",
-      "displayName": "X-Limit Padding",
-      "description": "Additional space to add to the X-axis limits.\n",
-      "paramType": "NUMBER",
-      "paramGroup": "Plot",
-      "paramValues": null,
-      "defaultValue": 0,
-      "condition": null,
-      "content": null,
-      "objectPropertyReference": null
-    },
-    {
-      "key": "ylim_additional",
-      "displayName": "Y-Limit Padding",
-      "description": "Additional space to add to the Y-axis limits.\n",
-      "paramType": "NUMBER",
-      "paramGroup": "Plot",
-      "paramValues": null,
-      "defaultValue": 0,
-      "condition": null,
-      "content": null,
-      "objectPropertyReference": null
-    },
-    {
       "key": "axis_lab_size",
       "displayName": "Axis Label Size",
       "description": "Size of the axis labels.\n",

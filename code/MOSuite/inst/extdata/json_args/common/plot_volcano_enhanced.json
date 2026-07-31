@@ -18,8 +18,6 @@
   "use_custom_lab": false,
   "ylim": 0,
   "custom_xlim": "",
-  "xlim_additional": 0,
-  "ylim_additional": 0,
   "axis_lab_size": 24,
   "point_size": 2,
   "image_width": 3000,

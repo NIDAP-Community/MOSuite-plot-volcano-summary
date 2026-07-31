@@ -29,8 +29,6 @@ plot_volcano_enhanced <- S7::new_generic(
     use_custom_lab = FALSE,
     ylim = 0,
     custom_xlim = "",
-    xlim_additional = 0,
-    ylim_additional = 0,
     axis_lab_size = 24,
     point_size = 2,
     image_width = 3000,
@@ -66,8 +64,6 @@ S7::method(plot_volcano_enhanced, multiOmicDataSet) <- function(
   use_custom_lab = FALSE,
   ylim = 0,
   custom_xlim = "",
-  xlim_additional = 0,
-  ylim_additional = 0,
   axis_lab_size = 24,
   point_size = 2,
   image_width = 3000,
@@ -99,8 +95,6 @@ S7::method(plot_volcano_enhanced, multiOmicDataSet) <- function(
         use_custom_lab,
         ylim,
         custom_xlim,
-        xlim_additional,
-        ylim_additional,
         axis_lab_size,
         point_size,
         image_width,
@@ -139,8 +133,6 @@ S7::method(plot_volcano_enhanced, multiOmicDataSet) <- function(
 #' @param use_custom_lab If TRUE, uses custom labels for the plot (set by `change_sig_name` and `change_lfc_name`)
 #' @param ylim Y-axis limits for the plot.
 #' @param custom_xlim Custom X-axis limits for the plot.
-#' @param xlim_additional Additional space to add to the X-axis limits.
-#' @param ylim_additional Additional space to add to the Y-axis limits.
 #' @param axis_lab_size Size of the axis labels.
 #' @param point_size Size of the points in the plot.
 #' @param image_width output image width in pixels - only used if save_plots is TRUE
@@ -173,8 +165,6 @@ S7::method(plot_volcano_enhanced, S7::class_data.frame) <- function(
   use_custom_lab = FALSE,
   ylim = 0,
   custom_xlim = "",
-  xlim_additional = 0,
-  ylim_additional = 0,
   axis_lab_size = 24,
   point_size = 2,
   image_width = 3000,
@@ -333,8 +323,8 @@ S7::method(plot_volcano_enhanced, S7::class_data.frame) <- function(
     ## X-axis custom range change:
     if (custom_xlim == "") {
       xlim <- c(
-        floor(min(df[, lfc_name])) - xlim_additional,
-        ceiling(max(df[, lfc_name])) + xlim_additional
+        floor(min(df[, lfc_name])),
+        ceiling(max(df[, lfc_name]))
       )
     } else if (grepl(",", custom_xlim) == FALSE) {
       xlim <- c(
@@ -385,7 +375,7 @@ S7::method(plot_volcano_enhanced, S7::class_data.frame) <- function(
       xlab = xlab,
       ylab = ylab,
       xlim = xlim,
-      ylim = c(0, maxy + ylim_additional),
+      ylim = c(0, maxy),
       pCutoff = signif_threshold,
       FCcutoff = change_threshold,
       axisLabSize = axis_lab_size,
@@ -410,7 +400,7 @@ S7::method(plot_volcano_enhanced, S7::class_data.frame) <- function(
         xlab = xlab,
         ylab = ylab,
         xlim = xlim,
-        ylim = c(0, maxy + ylim_additional),
+        ylim = c(0, maxy),
         pCutoff = signif_threshold,
         FCcutoff = change_threshold,
         axisLabSize = axis_lab_size,

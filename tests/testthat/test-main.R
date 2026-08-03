@@ -14,61 +14,26 @@ test_that("summary volcano capsule keeps expected CLI parameter contract", {
   main_lines <- read_repo_file("code", "main.R")
   main_text <- paste(main_lines, collapse = "\n")
 
-  expected_args <- c(
-    "feature_id_colname",
-    "signif_colname",
-    "change_colname",
-    "signif_threshold",
-    "change_threshold",
-    "value_to_sort_the_output_dataset",
-    "num_features_to_label",
-    "label_features",
-    "custom_gene_list",
-    "label_significant_features_only",
-    "default_label_color",
-    "custom_label_color",
-    "label_font_size",
-    "draw_connectors",
-    "change_sig_name",
-    "change_lfc_name",
-    "title",
-    "title_font_size",
-    "use_custom_lab",
-    "color_of_signif_threshold_line",
-    "color_of_non_significant_features",
-    "color_of_logfold_change_threshold_line",
-    "color_of_features_meeting_only_signif_threshold",
-    "color_for_features_meeting_pvalue_and_foldchange_thresholds",
-    "use_default_x_axis_limit",
-    "x_axis_limit",
-    "use_default_y_axis_limit",
-    "y_axis_limit",
-    "point_size",
-    "axis_lab_size",
-    "axis_tick_lab_size",
-    "add_deg_columns",
-    "image_width",
-    "image_height",
-    "dpi",
-    "use_default_grid_layout",
-    "number_of_rows_in_grid_layout",
-    "plot_filename"
+  # plot_volcano_summary() args the capsule intentionally does not expose as
+  # their own CLI flags:
+  #   - add_features is derived from whether custom_gene_list is non-empty
+  #   - flip_vplot is hardcoded to FALSE
+  #   - graphics_device/print_plots/save_plots/plots_subdir are capsule internals
+  not_exposed_by_design <- c(
+    "add_features",
+    "flip_vplot",
+    "graphics_device",
+    "print_plots",
+    "save_plots",
+    "plots_subdir"
   )
 
-  removed_args <- c(
-    "label_x_adj",
-    "label_y_adj",
-    "line_thickness",
-    "label_font_type",
-    "displace_feature_labels",
-    "custom_gene_list_special_label_displacement",
-    "special_label_displacement_x_axis",
-    "special_label_displacement_y_axis",
-    "aspect_ratio"
+  expected_args <- setdiff(
+    mosuite_plot_volcano_summary_args(),
+    not_exposed_by_design
   )
 
   expect_same_values(extract_main_arguments(main_lines), expected_args)
-  expect_false(any(removed_args %in% extract_main_arguments(main_lines)))
   expect_match(main_text, "plot_volcano_summary\\(")
   expect_match(
     main_text,

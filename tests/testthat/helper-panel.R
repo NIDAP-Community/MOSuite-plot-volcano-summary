@@ -6,6 +6,16 @@ read_repo_file <- function(...) {
   readLines(repo_path(...), warn = FALSE)
 }
 
+# Argument names accepted by the vendored MOSuite::plot_volcano_summary(),
+# read from its actual signature so the CLI contract test doesn't rely on a
+# hand-maintained copy of the argument list.
+mosuite_plot_volcano_summary_args <- function() {
+  suppressMessages(
+    devtools::load_all(repo_path("code", "MOSuite"), quiet = TRUE)
+  )
+  setdiff(names(formals(plot_volcano_summary)), "moo_diff")
+}
+
 extract_main_arguments <- function(main_lines) {
   main_text <- paste(main_lines, collapse = "\n")
   matches <- regmatches(

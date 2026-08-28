@@ -395,12 +395,12 @@
 		{
 			"id": "image_width_id",
 			"category": "VisualizationOutput",
-			"name": "Image width (pixels)",
+			"name": "Image width (inches)",
 			"param_name": "image_width",
-			"description": "Output image width in pixels. Used only when plots are saved to files.",
+			"description": "Output image width in inches. Used only when plots are saved to files.",
 			"type": "text",
 			"value_type": "string",
-			"default_value": "15"
+			"default_value": "10"
 		},
 		{
 			"id": "dpi_id",
@@ -425,12 +425,12 @@
 		{
 			"id": "image_height_id",
 			"category": "VisualizationOutput",
-			"name": "Image height (pixels)",
+			"name": "Image height (inches)",
 			"param_name": "image_height",
-			"description": "Output image height in pixels. Used only when plots are saved to files.",
+			"description": "Output image height in inches. Used only when plots are saved to files.",
 			"type": "text",
 			"value_type": "string",
-			"default_value": "15"
+			"default_value": "10"
 		},
 		{
 			"id": "use_default_grid_layout_id",

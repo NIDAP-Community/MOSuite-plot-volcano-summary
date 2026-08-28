@@ -2,6 +2,7 @@
 
 ## Development version
 
+- Use physical inch dimensions with 10 x 10 inch defaults and 300 DPI for saved volcano output. (#9, @TJoshMeyer)
 - Disable the nonfunctional flip volcano plot app panel option for MOSuite v0.4.1 (#6, @phoman14).
 - Improved the Code Ocean parameter UI for the plot volcano summary capsule (#2, @phoman14).
 - Use MOSuite v0.3.2. (#3, @kelly-sovacool)

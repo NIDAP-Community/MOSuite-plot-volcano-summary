@@ -207,15 +207,15 @@ parser$add_argument(
 )
 parser$add_argument(
   "--image_width",
-  type = "integer",
-  default = 15,
-  help = "Output image width"
+  type = "double",
+  default = 10,
+  help = "Output image width in inches"
 )
 parser$add_argument(
   "--image_height",
-  type = "integer",
-  default = 15,
-  help = "Output image height"
+  type = "double",
+  default = 10,
+  help = "Output image height in inches"
 )
 parser$add_argument(
   "--dpi",

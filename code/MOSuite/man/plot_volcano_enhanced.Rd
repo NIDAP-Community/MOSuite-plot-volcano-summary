@@ -40,8 +40,8 @@ plot_volcano_enhanced(
   color_of_features_meeting_only_signif_threshold = "royalblue",
   color_for_features_meeting_pvalue_and_foldchange_thresholds = "red2",
   graphics_device = grDevices::png,
-  image_width = 3000,
-  image_height = 3000,
+  image_width = 10,
+  image_height = 10,
   dpi = 300,
   use_default_grid_layout = TRUE,
   number_of_rows_in_grid_layout = NULL,
@@ -88,8 +88,8 @@ plot_volcano_enhanced(
   color_of_features_meeting_only_signif_threshold = "royalblue",
   color_for_features_meeting_pvalue_and_foldchange_thresholds = "red2",
   graphics_device = grDevices::png,
-  image_width = 3000,
-  image_height = 3000,
+  image_width = 10,
+  image_height = 10,
   dpi = 300,
   use_default_grid_layout = TRUE,
   number_of_rows_in_grid_layout = NULL,
@@ -136,8 +136,8 @@ plot_volcano_enhanced(
   color_of_features_meeting_only_signif_threshold = "royalblue",
   color_for_features_meeting_pvalue_and_foldchange_thresholds = "red2",
   graphics_device = grDevices::png,
-  image_width = 3000,
-  image_height = 3000,
+  image_width = 10,
+  image_height = 10,
   dpi = 300,
   use_default_grid_layout = TRUE,
   number_of_rows_in_grid_layout = NULL,
@@ -166,10 +166,12 @@ contrast (e.g. \code{c("B-A_adjpval", "C-A_adjpval")}). Defaults to \code{NULL},
 which auto-detects corresponding columns by checking for \verb{_adjpval} first,
 then \verb{_pval}, for each contrast in \code{change_colname}.}
 
-\item{signif_threshold}{Numeric significance threshold (p-value or adjusted p-value cutoff). Default: 0.05}
+\item{signif_threshold}{Numeric significance threshold (p-value or adjusted p-value cutoff). Features meet this
+threshold when their value is less than the cutoff (exclusive). Default: 0.05}
 
 \item{change_threshold}{Numeric value specifying the fold change cutoff for significance (i.e. filters on
-\code{change_colname})}
+\code{change_colname}). Features meet this threshold when the absolute value is greater than the cutoff (exclusive).
+Default: 1.0}
 
 \item{value_to_sort_the_output_dataset}{How to sort the output dataset. Options are "fold-change", "p-value", or
 "t-statistic".}
@@ -232,9 +234,9 @@ and fold change thresholds.}
 
 \item{graphics_device}{passed to \code{ggsave(device)}. Default: \code{grDevices::png}}
 
-\item{image_width}{output image width in pixels - only used if save_plots is TRUE}
+\item{image_width}{output image width in inches - only used if save_plots is TRUE. Default: 10}
 
-\item{image_height}{output image height in pixels - only used if save_plots is TRUE}
+\item{image_height}{output image height in inches - only used if save_plots is TRUE. Default: 10}
 
 \item{dpi}{dots-per-inch of the output image (see \code{ggsave()}) - only used if save_plots is TRUE}
 

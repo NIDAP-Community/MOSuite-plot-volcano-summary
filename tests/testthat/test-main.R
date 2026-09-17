@@ -139,7 +139,7 @@ test_that("main.R CLI creates volcano summary outputs", {
   expect_outputs_created(setup$results_dir)
 })
 
-test_that("run wrapper executes and creates volcano summary outputs", {
+test_that("run wrapper forwards CLI arguments to main.R", {
   setup <- setup_cli_workspace("mosuite_plot_volcano_summary_run_test_")
   on.exit(unlink(setup$workspace, recursive = TRUE), add = TRUE)
 
@@ -149,12 +149,39 @@ test_that("run wrapper executes and creates volcano summary outputs", {
     overwrite = TRUE
   )
 
+  fake_bin <- file.path(setup$workspace, "bin")
+  dir.create(fake_bin)
+  captured_args <- file.path(setup$workspace, "run-wrapper-args.txt")
+  fake_rscript <- file.path(fake_bin, "Rscript")
+  writeLines(
+    c(
+      "#!/usr/bin/env bash",
+      "printf '%s\\n' \"$@\" > \"$RUN_WRAPPER_ARGS_FILE\""
+    ),
+    fake_rscript
+  )
+  Sys.chmod(fake_rscript, "0755")
+
   old_wd <- getwd()
   setwd(setup$code_dir)
   on.exit(setwd(old_wd), add = TRUE)
 
-  exit_code <- system2("bash", args = c("run", common_cli_args))
+  exit_code <- system2(
+    "bash",
+    args = c("run", common_cli_args),
+    env = c(
+      paste0(
+        "PATH=",
+        paste(
+          c(fake_bin, "/usr/bin", "/bin", "/usr/sbin", "/sbin"),
+          collapse = .Platform$path.sep
+        )
+      ),
+      paste0("RUN_WRAPPER_ARGS_FILE=", captured_args)
+    )
+  )
   expect_equal(exit_code, 0, info = "run script should execute without error")
 
-  expect_outputs_created(setup$results_dir)
+  expect_true(file.exists(captured_args))
+  expect_equal(readLines(captured_args), c("main.R", common_cli_args))
 })

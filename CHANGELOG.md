@@ -2,6 +2,10 @@
 
 ## Development version
 
+- Use MOSuite v0.5.0. (#10, @kelly-sovacool)
+
+## v5.0
+
 - Disable the nonfunctional flip volcano plot app panel option for MOSuite v0.4.1 (#6, @phoman14).
 - Improved the Code Ocean parameter UI for the plot volcano summary capsule (#2, @phoman14).
 - Use MOSuite v0.3.2. (#3, @kelly-sovacool)

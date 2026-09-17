@@ -2,6 +2,8 @@
 
 ## Development version
 
+- Use MOSuite v0.5.0. (#10, @kelly-sovacool)
+
 ## v5.0
 
 - Disable the nonfunctional flip volcano plot app panel option for MOSuite v0.4.1 (#6, @phoman14).

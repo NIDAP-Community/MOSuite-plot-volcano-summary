@@ -1,4 +1,25 @@
 deg_repo_root <- normalizePath(file.path(testthat::test_path(), "..", ".."))
+# CI mounts every capsule at /workspace, so identify its actual entry point.
+deg_entry_points <- c(
+  plot_volcano_summary = "MOSuite-plot-volcano-summary",
+  plot_volcano_enhanced = "MOSuite-plot-volcano-enhanced",
+  plot_venn_diagram = "MOSuite-plot-venn-diagram",
+  filter_diff = "MOSuite-filter-diff"
+)
+deg_main_symbols <- all.names(parse(
+  file.path(deg_repo_root, "code", "main.R")
+))
+# Venn uses volcano summary to prepare memberships before rendering.
+deg_main_symbols <- if ("plot_venn_diagram" %in% deg_main_symbols) {
+  setdiff(deg_main_symbols, "plot_volcano_summary")
+} else {
+  deg_main_symbols
+}
+deg_matches <- intersect(names(deg_entry_points), deg_main_symbols)
+if (length(deg_matches) != 1L) {
+  stop("Expected exactly one supported capsule entry point in code/main.R.")
+}
+deg_capsule_name <- unname(deg_entry_points[[deg_matches]])
 suppressMessages(devtools::load_all(
   file.path(deg_repo_root, "code", "MOSuite"),
   quiet = TRUE
@@ -200,7 +221,7 @@ deg_run_cli <- function(input, mode, extra = character()) {
     main,
     fixed = TRUE
   )
-  if (basename(deg_repo_root) == "MOSuite-plot-volcano-enhanced") {
+  if (deg_capsule_name == "MOSuite-plot-volcano-enhanced") {
     # Enhanced returns plot data but does not normally emit a companion CSV.
     main <- c(
       main,
@@ -239,7 +260,7 @@ deg_run_cli <- function(input, mode, extra = character()) {
 }
 
 test_that("table and MOO CLI routes produce the same downstream artifacts", {
-  repo_name <- basename(deg_repo_root)
+  repo_name <- deg_capsule_name
   dat <- deg_fixture()
   moo <- deg_table_to_moo(dat)
   if (repo_name == "MOSuite-filter-diff") {
@@ -308,7 +329,7 @@ test_that("table and MOO CLI routes produce the same downstream artifacts", {
 })
 
 test_that("single-contrast tables and MOO inputs produce the same results", {
-  repo <- basename(deg_repo_root)
+  repo <- deg_capsule_name
   dat <- deg_fixture()
   dat <- dat[, !startsWith(names(dat), "B_X-C_X_"), drop = FALSE]
   extra <- if (repo == "MOSuite-filter-diff") {
@@ -364,7 +385,7 @@ test_that("single-contrast tables and MOO inputs produce the same results", {
   }
 })
 
-if (basename(deg_repo_root) == "MOSuite-plot-venn-diagram") {
+if (deg_capsule_name == "MOSuite-plot-venn-diagram") {
   test_that("Venn CLI supports identical memberships for both inputs", {
     dat <- deg_fixture()
     for (contrast in c("B_X-A_X", "B_X-C_X")) {

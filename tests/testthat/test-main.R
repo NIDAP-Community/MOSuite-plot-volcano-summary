@@ -40,11 +40,11 @@ test_that("summary volcano capsule keeps expected CLI parameter contract", {
   expect_match(main_text, "plot_volcano_summary\\(")
   expect_match(
     main_text,
-    "signif_colname = parse_optional_vector\\(args\\$signif_colname\\)"
+    "signif_colname = resolved_columns\\$signif_colname"
   )
   expect_match(
     main_text,
-    "change_colname = parse_optional_vector\\(args\\$change_colname\\)"
+    "change_colname = resolved_columns\\$change_colname"
   )
   expect_match(main_text, "label_font_size = args\\$label_font_size")
   expect_match(main_text, "draw_connectors = args\\$draw_connectors")

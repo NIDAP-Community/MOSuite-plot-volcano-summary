@@ -5,6 +5,9 @@
 - Accept OMIX DEG CSV/TSV/TXT as well as existing MOO input, with MOO-first
   automatic discovery and explicit input type/file controls. (#15, @TJoshMeyer)
 - Validate tabular DEG inputs and preserve existing plotting/output behavior.
+- Check required statistics against selected contrasts, sorting, and export
+  settings before plotting; allow reduced tables with compatible options and
+  keep standard errors optional unless selected for export. (#15, @TJoshMeyer)
 - Add MOO/table CLI parity tests; leave managed MOSuite source unchanged.
 
 ## v6.0

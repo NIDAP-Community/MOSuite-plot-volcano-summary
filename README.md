@@ -24,6 +24,15 @@ No counts or sample metadata are required for these result plots.
   `--feature_id_colname`. Leave significance/change column controls blank for
   automatic detection, or enter exact columns for selected contrasts.
 
+Before plotting, the capsule checks the columns needed by the selected
+contrasts, sorting, and summary export settings. Reduced tables are supported:
+for example, `GeneName`, `B-A_logFC`, and `B-A_adjpval` work with
+`--value_to_sort_the_output_dataset=fold-change` and
+`--add_deg_columns=logFC,adjpval`. Use `--add_deg_columns=none` to export only
+feature IDs and contrast memberships. Missing required statistics are reported
+explicitly; they are not reconstructed. `SE` is optional unless requested for
+export.
+
 The same MOSuite data-frame method processes both routes; MOO statistics are
 joined into a wide table first. Existing plot and
 `results/moo/volcano_summary_data.csv` paths and thresholds are unchanged.
@@ -37,6 +46,7 @@ contrast names containing underscores. Code Ocean runs are still required
 before release; local tests are not platform validation.
 
 `code/deg-input.R` is capsule-owned and shared verbatim with the Enhanced
-Volcano, Venn and Filter Differential Expression capsules. Keep the four copies
-and their input tests synchronized. SyncWeaver-managed `code/MOSuite` and its
+Volcano, Venn and Filter Differential Expression capsules. Keep the four adapter
+copies and common input tests synchronized; Summary-specific sorting/export
+preflight tests are maintained here. SyncWeaver-managed `code/MOSuite` and its
 source pin are unchanged.

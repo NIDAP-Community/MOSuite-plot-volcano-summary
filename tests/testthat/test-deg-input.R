@@ -199,7 +199,12 @@ test_that("MOO loading bridges classes and rejects malformed contrast lists", {
   }
 })
 
-deg_run_cli <- function(input, mode, extra = character()) {
+deg_run_cli <- function(
+  input,
+  mode,
+  extra = character(),
+  expected_error = NULL
+) {
   workspace <- tempfile("deg-cli-")
   dir.create(workspace)
   code <- file.path(workspace, "code")
@@ -251,6 +256,17 @@ deg_run_cli <- function(input, mode, extra = character()) {
     stderr = TRUE
   ))
   status <- attr(log, "status")
+  if (!is.null(expected_error)) {
+    on.exit(unlink(workspace, recursive = TRUE), add = TRUE)
+    testthat::expect_true(!is.null(status) && status != 0L)
+    testthat::expect_match(paste(log, collapse = "\n"), expected_error)
+    testthat::expect_false(any(grepl(
+      "Preparing table for contrast:",
+      log,
+      fixed = TRUE
+    )))
+    return(invisible(NULL))
+  }
   if (!is.null(status) && status != 0L) {
     unlink(workspace, recursive = TRUE)
     writeLines(log)
@@ -327,6 +343,106 @@ test_that("table and MOO CLI routes produce the same downstream artifacts", {
     expect_identical(read_output(all_run)$GeneName, c("gene2", "gene6"))
   }
 })
+
+if (deg_capsule_name == "MOSuite-plot-volcano-summary") {
+  test_that("Summary rejects missing statistics before plotting", {
+    dat <- deg_fixture()[, c(
+      "GeneName",
+      "B_X-A_X_logFC",
+      "B_X-A_X_adjpval"
+    )]
+    deg_run_cli(
+      dat,
+      "table",
+      expected_error = paste0(
+        "Missing DEG columns required.*",
+        "B_X-A_X_FC, B_X-A_X_tstat, B_X-A_X_pval"
+      )
+    )
+    deg_run_cli(
+      dat,
+      "table",
+      "--add_deg_columns=logFC,adjpval",
+      expected_error = "Missing DEG columns required.*B_X-A_X_tstat"
+    )
+    deg_run_cli(
+      dat,
+      "table",
+      "--value_to_sort_the_output_dataset=p-value",
+      expected_error = "Missing DEG columns required.*B_X-A_X_FC"
+    )
+    deg_run_cli(
+      dat,
+      "table",
+      c(
+        "--value_to_sort_the_output_dataset=fold-change",
+        "--add_deg_columns=logFC,adjpval,SE"
+      ),
+      expected_error = "Missing DEG columns required.*B_X-A_X_SE"
+    )
+  })
+
+  test_that("Summary permits reduced statistics for compatible settings", {
+    dat <- deg_fixture()[, c(
+      "GeneName",
+      "B_X-A_X_logFC",
+      "B_X-A_X_adjpval",
+      "B_X-C_X_logFC",
+      "B_X-C_X_adjpval"
+    )]
+    extra <- c(
+      "--change_colname=B_X-A_X_logFC",
+      "--value_to_sort_the_output_dataset=fold-change",
+      "--add_deg_columns=logFC,adjpval",
+      "--num_features_to_label=0",
+      "--image_width=3",
+      "--image_height=3",
+      "--dpi=72"
+    )
+    run <- deg_run_cli(dat, "table", extra)
+    on.exit(unlink(run$workspace, recursive = TRUE), add = TRUE)
+    result <- read.csv(file.path(
+      run$results,
+      "moo",
+      "volcano_summary_data.csv"
+    ))
+    expect_identical(
+      names(result),
+      c("GeneName", "Contrast", "logFC", "adjpval")
+    )
+    expect_setequal(result$GeneName, c("gene1", "gene2", "gene6"))
+    expect_identical(unique(result$Contrast), "B_X-A_X")
+    expect_gt(
+      file.info(file.path(
+        run$results,
+        "figures",
+        "diff",
+        "volcano_summary.png"
+      ))$size,
+      0
+    )
+    none_run <- deg_run_cli(
+      dat,
+      "table",
+      c(
+        "--value_to_sort_the_output_dataset=p-value",
+        "--add_deg_columns=none",
+        "--num_features_to_label=0",
+        "--image_width=3",
+        "--image_height=3",
+        "--dpi=72"
+      )
+    )
+    on.exit(unlink(none_run$workspace, recursive = TRUE), add = TRUE)
+    memberships <- read.csv(file.path(
+      none_run$results,
+      "moo",
+      "volcano_summary_data.csv"
+    ))
+    expect_identical(names(memberships), c("GeneName", "Contrast"))
+    expect_setequal(unique(memberships$Contrast), c("B_X-A_X", "B_X-C_X"))
+  })
+}
 
 test_that("single-contrast tables and MOO inputs produce the same results", {
   repo <- deg_capsule_name

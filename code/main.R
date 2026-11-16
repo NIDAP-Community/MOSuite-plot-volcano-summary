@@ -266,14 +266,51 @@ if (!is.data.frame(deg_input)) {
   deg_input <- join_dfs_wide(deg_input@analyses$diff)
 }
 
+resolved_columns <- MOSuite:::resolve_volcano_colnames(
+  deg_input,
+  parse_optional_vector(args$change_colname),
+  parse_optional_vector(args$signif_colname)
+)
+selected_contrasts <- sub("_logFC$", "", resolved_columns$change_colname)
+export_statistics <- parse_optional_vector(args$add_deg_columns)
+# Match MOSuite's default export behavior for an empty selection.
+if (is.null(export_statistics) || !length(export_statistics)) {
+  export_statistics <- c("FC", "logFC", "tstat", "pval", "adjpval")
+}
+export_statistics <- setdiff(export_statistics, "none")
+required_statistics <- unique(c(
+  export_statistics,
+  if (args$value_to_sort_the_output_dataset == "t-statistic") "tstat"
+))
+required_columns <- unique(c(
+  resolved_columns$change_colname,
+  resolved_columns$signif_colname,
+  if (length(required_statistics)) {
+    unlist(lapply(selected_contrasts, function(contrast) {
+      paste0(contrast, "_", required_statistics)
+    }))
+  }
+))
+missing_columns <- setdiff(required_columns, names(deg_input))
+if (length(missing_columns)) {
+  stop(
+    "Missing DEG columns required by the selected plotting/sorting/export ",
+    "settings: ",
+    paste(missing_columns, collapse = ", "),
+    ". Supply these statistics or select compatible contrast, sorting, ",
+    "and --add_deg_columns options.",
+    call. = FALSE
+  )
+}
+
 has_custom_gene_list <- nchar(trimws(args$custom_gene_list)) > 0
 
 # run MOSuite
 summary_dat <- plot_volcano_summary(
   deg_input,
   feature_id_colname = args$feature_id_colname,
-  signif_colname = parse_optional_vector(args$signif_colname),
-  change_colname = parse_optional_vector(args$change_colname),
+  signif_colname = resolved_columns$signif_colname,
+  change_colname = resolved_columns$change_colname,
   signif_threshold = args$signif_threshold,
   change_threshold = args$change_threshold,
   value_to_sort_the_output_dataset = args$value_to_sort_the_output_dataset,

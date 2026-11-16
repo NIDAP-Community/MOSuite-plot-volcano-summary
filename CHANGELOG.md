@@ -1,5 +1,12 @@
 # Code Ocean capsule - MOSuite - Plot Volcano Summary
 
+## development version
+
+- Accept OMIX DEG CSV/TSV/TXT as well as existing MOO input, with MOO-first
+  automatic discovery and explicit input type/file controls.
+- Validate tabular DEG inputs and preserve existing plotting/output behavior.
+- Add MOO/table CLI parity tests; leave managed MOSuite source unchanged.
+
 ## v6.0
 
 - Use MOSuite v0.5.0. (#10, @kelly-sovacool)

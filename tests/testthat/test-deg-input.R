@@ -1,6 +1,7 @@
 deg_repo_root <- normalizePath(file.path(testthat::test_path(), "..", ".."))
 suppressMessages(devtools::load_all(
-  file.path(deg_repo_root, "code", "MOSuite"), quiet = TRUE
+  file.path(deg_repo_root, "code", "MOSuite"),
+  quiet = TRUE
 ))
 source(file.path(deg_repo_root, "code", "deg-input.R"))
 
@@ -31,7 +32,8 @@ test_that("DEG validation preserves OMIX statistics, names and expression", {
   expect_identical(deg_validate_table(dat), dat)
   reordered <- dat[, c("sample1", setdiff(names(dat), "sample1"))]
   expect_identical(
-    names(deg_validate_table(reordered, "GeneName"))[1], "GeneName"
+    names(deg_validate_table(reordered, "GeneName"))[1],
+    "GeneName"
   )
   bad <- dat
   bad$GeneName[1] <- bad$GeneName[2]
@@ -47,7 +49,8 @@ test_that("DEG validation preserves OMIX statistics, names and expression", {
   expect_error(deg_validate_table(bad), "numeric")
   expect_error(deg_validate_table(dat[, c("GeneName", "sample1")]), "_logFC")
   expect_error(
-    deg_validate_table(dat[, c("GeneName", "B_X-A_X_logFC")]), "_pval"
+    deg_validate_table(dat[, c("GeneName", "B_X-A_X_logFC")]),
+    "_pval"
   )
   expect_error(deg_validate_table(dat, "missing"), "not found")
   bad <- dat
@@ -62,11 +65,13 @@ test_that("discovery uses MOO first and ignores OMIX companion CSV files", {
   dat <- deg_fixture()
   write.csv(dat, file.path(root, "DEG_Analysis.csv"), row.names = FALSE)
   write.csv(
-    data.frame(Sample = "sample1"), file.path(root, "Sample_Metadata.csv"),
+    data.frame(Sample = "sample1"),
+    file.path(root, "Sample_Metadata.csv"),
     row.names = FALSE
   )
   write.csv(
-    data.frame(Package = "limma"), file.path(root, "r-packages.csv"),
+    data.frame(Package = "limma"),
+    file.path(root, "r-packages.csv"),
     row.names = FALSE
   )
   expect_equal(load_deg_input(data_dir = root), dat)
@@ -82,7 +87,9 @@ test_that("discovery uses MOO first and ignores OMIX companion CSV files", {
   )
   dir.create(file.path(root, "other"))
   write.csv(
-    dat, file.path(root, "other", "DEG_Analysis.csv"), row.names = FALSE
+    dat,
+    file.path(root, "other", "DEG_Analysis.csv"),
+    row.names = FALSE
   )
   expect_error(load_deg_input("table", data_dir = root), "exactly one")
   expect_error(
@@ -111,7 +118,8 @@ test_that("analysis-only MOO invents no counts or standard-deviation aliases", {
   expect_identical(names(moo@analyses$diff), c("B_X-A_X", "B_X-C_X"))
   for (contrast in names(moo@analyses$diff)) {
     expect_identical(
-      moo@analyses$diff[[contrast]]$SE, dat[[paste0(contrast, "_SE")]]
+      moo@analyses$diff[[contrast]]$SE,
+      dat[[paste0(contrast, "_SE")]]
     )
     expect_false("sd" %in% names(moo@analyses$diff[[contrast]]))
   }
@@ -141,8 +149,10 @@ test_that("MOO loading bridges classes and rejects malformed contrast lists", {
     )
   )
   legacy <- legacy_class(
-    sample_meta = moo@sample_meta, annotation = moo@annotation,
-    counts = moo@counts, analyses = moo@analyses
+    sample_meta = moo@sample_meta,
+    annotation = moo@annotation,
+    counts = moo@counts,
+    analyses = moo@analyses
   )
   saveRDS(legacy, path)
   restored <- load_deg_input(input_file = path)
@@ -153,8 +163,10 @@ test_that("MOO loading bridges classes and rejects malformed contrast lists", {
   expect_equal(restored@annotation, moo@annotation)
   if (requireNamespace("MOObject", quietly = TRUE)) {
     current <- MOObject::multiOmicDataSet(
-      sample_metadata = moo@sample_meta, anno_dat = moo@annotation,
-      counts_lst = moo@counts, analyses_lst = moo@analyses
+      sample_metadata = moo@sample_meta,
+      anno_dat = moo@annotation,
+      counts_lst = moo@counts,
+      analyses_lst = moo@analyses
     )
     saveRDS(current, path)
     restored <- load_deg_input(input_file = path)
@@ -182,17 +194,21 @@ deg_run_cli <- function(input, mode, extra = character()) {
   main <- gsub(
     "devtools::load_all('/code/MOSuite')",
     sprintf(
-      "devtools::load_all('%s')", file.path(deg_repo_root, "code", "MOSuite")
+      "devtools::load_all('%s')",
+      file.path(deg_repo_root, "code", "MOSuite")
     ),
     main,
     fixed = TRUE
   )
   if (basename(deg_repo_root) == "MOSuite-plot-volcano-enhanced") {
     # Enhanced returns plot data but does not normally emit a companion CSV.
-    main <- c(main, paste0(
-      "write.csv(volc_enh_dat, ",
-      "\"../results/moo/volcano_enhanced_data.csv\", row.names = FALSE)"
-    ))
+    main <- c(
+      main,
+      paste0(
+        "write.csv(volc_enh_dat, ",
+        "\"../results/moo/volcano_enhanced_data.csv\", row.names = FALSE)"
+      )
+    )
   }
   writeLines(main, file.path(code, "main.R"))
   if (mode == "moo") {
@@ -200,7 +216,8 @@ deg_run_cli <- function(input, mode, extra = character()) {
   } else {
     write.csv(input, file.path(data, "DEG_Analysis.csv"), row.names = FALSE)
     write.csv(
-      data.frame(Sample = "sample1"), file.path(data, "Sample_Metadata.csv"),
+      data.frame(Sample = "sample1"),
+      file.path(data, "Sample_Metadata.csv"),
       row.names = FALSE
     )
   }
@@ -209,7 +226,8 @@ deg_run_cli <- function(input, mode, extra = character()) {
   log <- suppressWarnings(system2(
     file.path(R.home("bin"), "Rscript"),
     c("main.R", extra),
-    stdout = TRUE, stderr = TRUE
+    stdout = TRUE,
+    stderr = TRUE
   ))
   status <- attr(log, "status")
   if (!is.null(status) && status != 0L) {
@@ -234,7 +252,9 @@ test_that("table and MOO CLI routes produce the same downstream artifacts", {
     image <- file.path("diff", "venn_diagram.png")
   } else {
     extra <- c(
-      "--num_features_to_label=0", "--image_width=3", "--image_height=3",
+      "--num_features_to_label=0",
+      "--image_width=3",
+      "--image_height=3",
       "--dpi=72"
     )
     stem <- if (repo_name == "MOSuite-plot-volcano-summary") {
@@ -276,7 +296,9 @@ test_that("table and MOO CLI routes produce the same downstream artifacts", {
   if (repo_name == "MOSuite-filter-diff") {
     expect_identical(table_out$GeneName, c("gene1", "gene2", "gene3", "gene6"))
     filtered <- readRDS(file.path(
-      table_run$results, "moo", "moo-diff-filt.rds"
+      table_run$results,
+      "moo",
+      "moo-diff-filt.rds"
     ))
     expect_equal(filtered@analyses$diff_filt, table_out, ignore_attr = TRUE)
     all_run <- deg_run_cli(dat, "table", c(extra, "--filtering_mode=all"))
@@ -295,11 +317,14 @@ test_that("single-contrast tables and MOO inputs produce the same results", {
     c("--image_width=800", "--image_height=600")
   } else {
     c(
-      "--num_features_to_label=0", "--image_width=3", "--image_height=3",
+      "--num_features_to_label=0",
+      "--image_width=3",
+      "--image_height=3",
       "--dpi=72"
     )
   }
-  output <- switch(repo,
+  output <- switch(
+    repo,
     "MOSuite-filter-diff" = "DEG_Analysis_Filtered.csv",
     "MOSuite-plot-venn-diagram" = "venn_diagram_data.csv",
     "MOSuite-plot-volcano-summary" = "volcano_summary_data.csv",
@@ -313,9 +338,12 @@ test_that("single-contrast tables and MOO inputs produce the same results", {
   moo <- multiOmicDataSet(
     sample_metadata = data.frame(Sample = "sample1", Group = "A_X"),
     anno_dat = moo@annotation,
-    counts_lst = list(raw = data.frame(
-      GeneName = dat$GeneName, sample1 = seq_len(nrow(dat))
-    )),
+    counts_lst = list(
+      raw = data.frame(
+        GeneName = dat$GeneName,
+        sample1 = seq_len(nrow(dat))
+      )
+    ),
     analyses_lst = analyses
   )
   moo_run <- deg_run_cli(moo, "moo", extra)
@@ -358,7 +386,10 @@ if (basename(deg_repo_root) == "MOSuite-plot-venn-diagram") {
     expect_equal(unique(result$Size), nrow(dat))
     for (run in list(table_run, moo_run)) {
       image <- file.path(
-        run$results, "figures", "diff", "venn_diagram.png"
+        run$results,
+        "figures",
+        "diff",
+        "venn_diagram.png"
       )
       expect_gt(file.info(image)$size, 0)
     }

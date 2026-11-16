@@ -33,7 +33,10 @@ test_that("summary volcano capsule keeps expected CLI parameter contract", {
     not_exposed_by_design
   )
 
-  expect_same_values(extract_main_arguments(main_lines), c("input_type", "input_file", expected_args))
+  expect_same_values(
+    extract_main_arguments(main_lines),
+    c("input_type", "input_file", expected_args)
+  )
   expect_match(main_text, "plot_volcano_summary\\(")
   expect_match(
     main_text,

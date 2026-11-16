@@ -14,11 +14,14 @@ setup_capsule_environment()
 parser <- ArgumentParser()
 source("deg-input.R")
 parser$add_argument(
-  "--input_type", default = "auto", choices = c("auto", "moo", "table"),
+  "--input_type",
+  default = "auto",
+  choices = c("auto", "moo", "table"),
   help = "Auto prefers a unique MOO, otherwise DEG_Analysis.csv; or choose moo/table"
 )
 parser$add_argument(
-  "--input_file", default = "",
+  "--input_file",
+  default = "",
   help = "Optional explicit MOO RDS or DEG CSV/TSV/TXT path"
 )
 
@@ -254,8 +257,14 @@ parser$add_argument(
 args <- parser$parse_args()
 
 # load multiOmicDataSet from data directory
-deg_input <- load_deg_input(args$input_type, args$input_file, args$feature_id_colname)
-if (!is.data.frame(deg_input)) deg_input <- join_dfs_wide(deg_input@analyses$diff)
+deg_input <- load_deg_input(
+  args$input_type,
+  args$input_file,
+  args$feature_id_colname
+)
+if (!is.data.frame(deg_input)) {
+  deg_input <- join_dfs_wide(deg_input@analyses$diff)
+}
 
 has_custom_gene_list <- nchar(trimws(args$custom_gene_list)) > 0
 

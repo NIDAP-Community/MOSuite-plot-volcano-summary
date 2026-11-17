@@ -79,7 +79,7 @@ test_that("DEG validation preserves OMIX statistics, names and expression", {
   expect_error(deg_validate_table(bad), "duplicate column")
 })
 
-test_that("discovery uses MOO first and ignores OMIX companion CSV files", {
+test_that("discovery prefers MOO and accepts only the named DEG CSV", {
   root <- tempfile("deg-discovery-")
   dir.create(root)
   on.exit(unlink(root, recursive = TRUE), add = TRUE)
@@ -99,33 +99,35 @@ test_that("discovery uses MOO first and ignores OMIX companion CSV files", {
   moo <- deg_table_to_moo(dat)
   saveRDS(moo, file.path(root, "moo-diff.rds"))
   expect_s7_class(load_deg_input(data_dir = root), multiOmicDataSet)
-  expect_equal(load_deg_input("table", data_dir = root), dat)
   saveRDS(moo, file.path(root, "other.rds"))
   expect_error(load_deg_input(data_dir = root), "exactly one")
-  expect_s7_class(
-    load_deg_input(input_file = file.path(root, "moo-diff.rds")),
-    multiOmicDataSet
-  )
-  dir.create(file.path(root, "other"))
+
+  table_root <- tempfile("deg-table-discovery-")
+  dir.create(table_root)
+  on.exit(unlink(table_root, recursive = TRUE), add = TRUE)
+  expect_error(load_deg_input(data_dir = table_root), "No supported DEG input")
+  write.csv(dat, file.path(table_root, "Other_Results.csv"), row.names = FALSE)
+  expect_error(load_deg_input(data_dir = table_root), "No supported DEG input")
+  write.csv(dat, file.path(table_root, "DEG_Analysis.tsv"), row.names = FALSE)
+  expect_error(load_deg_input(data_dir = table_root), "No supported DEG input")
+  write.csv(dat, file.path(table_root, "DEG_Analysis.csv"), row.names = FALSE)
+  expect_equal(load_deg_input(data_dir = table_root), dat)
+  dir.create(file.path(table_root, "other"))
   write.csv(
     dat,
-    file.path(root, "other", "DEG_Analysis.csv"),
+    file.path(table_root, "other", "DEG_Analysis.csv"),
     row.names = FALSE
   )
-  expect_error(load_deg_input("table", data_dir = root), "exactly one")
+  expect_error(load_deg_input(data_dir = table_root), "exactly one")
+
+  invalid_root <- tempfile("deg-invalid-moo-")
+  dir.create(invalid_root)
+  on.exit(unlink(invalid_root, recursive = TRUE), add = TRUE)
+  saveRDS(list(not_a_moo = TRUE), file.path(invalid_root, "invalid.rds"))
   expect_error(
-    load_deg_input(input_file = file.path(root, "missing.csv")),
-    "does not exist"
-  )
-  saveRDS(list(not_a_moo = TRUE), file.path(root, "invalid.rds"))
-  expect_error(
-    load_deg_input(input_file = file.path(root, "invalid.rds")),
+    load_deg_input(data_dir = invalid_root),
     "not a multiOmicDataSet"
   )
-  tsv <- file.path(root, "selected.tsv")
-  write.table(dat, tsv, sep = "\t", quote = FALSE, row.names = FALSE)
-  expect_equal(load_deg_input("table", tsv), dat)
-  expect_error(load_deg_input("moo", tsv), "RDS")
 })
 
 test_that("analysis-only MOO invents no counts or standard-deviation aliases", {
@@ -149,16 +151,18 @@ test_that("analysis-only MOO invents no counts or standard-deviation aliases", {
 test_that("MOO loading bridges classes and rejects malformed contrast lists", {
   dat <- deg_fixture()
   moo <- deg_table_to_moo(dat)
-  path <- tempfile(fileext = ".rds")
-  on.exit(unlink(path), add = TRUE)
+  root <- tempfile("deg-moo-validation-")
+  dir.create(root)
+  on.exit(unlink(root, recursive = TRUE), add = TRUE)
+  path <- file.path(root, "moo-diff.rds")
   bad <- moo
   bad@analyses$diff <- list(contrast = "not a table")
   saveRDS(bad, path)
-  expect_error(load_deg_input(input_file = path), "per-contrast")
+  expect_error(load_deg_input(data_dir = root), "per-contrast")
   bad <- moo
   names(bad@analyses$diff) <- c("", "valid")
   saveRDS(bad, path)
-  expect_error(load_deg_input(input_file = path), "per-contrast")
+  expect_error(load_deg_input(data_dir = root), "per-contrast")
   legacy_class <- S7::new_class(
     "multiOmicDataSet",
     package = "MOSuite",
@@ -176,7 +180,7 @@ test_that("MOO loading bridges classes and rejects malformed contrast lists", {
     analyses = moo@analyses
   )
   saveRDS(legacy, path)
-  restored <- load_deg_input(input_file = path)
+  restored <- load_deg_input(data_dir = root)
   expect_s7_class(restored, multiOmicDataSet)
   expect_equal(restored@analyses, moo@analyses)
   expect_equal(restored@counts, moo@counts)
@@ -190,7 +194,7 @@ test_that("MOO loading bridges classes and rejects malformed contrast lists", {
       analyses_lst = moo@analyses
     )
     saveRDS(current, path)
-    restored <- load_deg_input(input_file = path)
+    restored <- load_deg_input(data_dir = root)
     expect_s7_class(restored, multiOmicDataSet)
     expect_equal(restored@analyses, moo@analyses)
     expect_equal(restored@counts, moo@counts)

@@ -9,7 +9,7 @@
 		{
 			"id": "318a2347-25cb-4210-9c1b-f9736f450deb",
 			"name": "Differential expression results",
-			"description": "Attach a MOSuite DEG result or a CSV named DEG_Analysis.csv. The capsule detects the supported input automatically."
+			"description": "Differential expression results containing feature identifiers and per-contrast statistics, provided as a MOSuite MOO RDS or an OMIX DEG_Analysis.csv table."
 		}
 	],
 	"categories": [

@@ -9,7 +9,8 @@
 - Check required statistics against selected contrasts, sorting, and export
   settings before plotting; allow reduced tables with compatible options and
   keep standard errors optional unless selected for export. (#15, @TJoshMeyer)
-- Add MOO/table CLI parity tests; leave managed MOSuite source unchanged.
+- Load MOO inputs with the shared MOSuite helper and retain MOO/table CLI
+  parity tests.
 
 ## v6.0
 

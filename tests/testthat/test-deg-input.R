@@ -97,10 +97,14 @@ test_that("discovery prefers MOO and accepts only the named DEG CSV", {
   )
   expect_equal(load_deg_input(data_dir = root), dat)
   moo <- deg_table_to_moo(dat)
-  saveRDS(moo, file.path(root, "moo-diff.rds"))
+  dir.create(file.path(root, "nested"))
+  saveRDS(moo, file.path(root, "nested", "moo-diff.RDS"))
   expect_s7_class(load_deg_input(data_dir = root), multiOmicDataSet)
   saveRDS(moo, file.path(root, "other.rds"))
-  expect_error(load_deg_input(data_dir = root), "exactly one")
+  expect_error(
+    load_deg_input(data_dir = root),
+    "Multiple RDS files found: .*moo-diff.RDS.*other.rds"
+  )
 
   table_root <- tempfile("deg-table-discovery-")
   dir.create(table_root)
@@ -126,7 +130,7 @@ test_that("discovery prefers MOO and accepts only the named DEG CSV", {
   saveRDS(list(not_a_moo = TRUE), file.path(invalid_root, "invalid.rds"))
   expect_error(
     load_deg_input(data_dir = invalid_root),
-    "not a multiOmicDataSet"
+    "multiOmicDataSet"
   )
 })
 

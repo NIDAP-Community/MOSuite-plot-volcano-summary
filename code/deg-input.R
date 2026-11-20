@@ -1,5 +1,4 @@
-# Capsule-owned adapter shared by the four downstream DEG capsules.
-# Keep copies synchronized; do not place this file in the managed MOSuite tree.
+# Capsule-owned DEG input adapter; managed MOSuite source is synced separately.
 
 deg_unique_file <- function(paths, label) {
   if (length(paths) != 1L) {
@@ -86,39 +85,7 @@ load_deg_input <- function(
   rds <- files[grepl("[.]rds$", files, ignore.case = TRUE)]
 
   if (length(rds)) {
-    path <- deg_unique_file(rds, "MOO RDS")
-    input_type <- "moo"
-  } else {
-    tables <- files[tolower(basename(files)) == "deg_analysis.csv"]
-    if (!length(tables)) {
-      stop(
-        "No supported DEG input found. Attach one MOSuite MOO RDS or a ",
-        "CSV named DEG_Analysis.csv.",
-        call. = FALSE
-      )
-    }
-    path <- deg_unique_file(tables, "DEG_Analysis.csv")
-    input_type <- "table"
-  }
-
-  message("Reading ", input_type, " DEG input from ", path)
-  if (input_type == "moo") {
-    moo <- readr::read_rds(path)
-    if (
-      !S7::S7_inherits(moo, S7::S7_object) ||
-        !any(grepl("(^|::)multiOmicDataSet$", class(moo)))
-    ) {
-      stop("RDS input is not a multiOmicDataSet.", call. = FALSE)
-    }
-    # Capsule pins include both the older MOSuite and newer MOObject classes.
-    if (!S7::S7_inherits(moo, MOSuite::multiOmicDataSet)) {
-      moo <- MOSuite::multiOmicDataSet(
-        sample_metadata = moo@sample_meta,
-        anno_dat = moo@annotation,
-        counts_lst = moo@counts,
-        analyses_lst = moo@analyses
-      )
-    }
+    moo <- MOSuite::load_moo_from_data_dir(data_dir)
     S7::validate(moo)
     if (
       !is.list(moo@analyses$diff) ||
@@ -135,7 +102,19 @@ load_deg_input <- function(
       )
     }
     return(moo)
+  } else {
+    tables <- files[tolower(basename(files)) == "deg_analysis.csv"]
+    if (!length(tables)) {
+      stop(
+        "No supported DEG input found. Attach one MOSuite MOO RDS or a ",
+        "CSV named DEG_Analysis.csv.",
+        call. = FALSE
+      )
+    }
+    path <- deg_unique_file(tables, "DEG_Analysis.csv")
   }
+
+  message("Reading table DEG input from ", path)
   dat <- utils::read.csv(path, check.names = FALSE, stringsAsFactors = FALSE)
   deg_validate_table(dat, feature_id_colname)
 }

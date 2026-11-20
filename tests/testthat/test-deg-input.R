@@ -376,12 +376,16 @@ if (deg_capsule_name == "MOSuite-plot-volcano-summary") {
   test_that("Summary retains numeric-looking IDs in output", {
     dat <- deg_fixture()
     dat$GeneName <- c("00123", "123", "1e10", sprintf("%05d", 4:12))
-    run <- deg_run_cli(dat, "table", c(
-      "--num_features_to_label=0",
-      "--image_width=3",
-      "--image_height=3",
-      "--dpi=72"
-    ))
+    run <- deg_run_cli(
+      dat,
+      "table",
+      c(
+        "--num_features_to_label=0",
+        "--image_width=3",
+        "--image_height=3",
+        "--dpi=72"
+      )
+    )
     on.exit(unlink(run$workspace, recursive = TRUE), add = TRUE)
     result <- read.csv(
       file.path(run$results, "moo", "volcano_summary_data.csv"),

@@ -249,14 +249,20 @@ args <- parser$parse_args()
 deg_input <- load_deg_input(
   args$feature_id_colname
 )
-if (!is.data.frame(deg_input)) {
+is_table_input <- is.data.frame(deg_input)
+if (!is_table_input) {
   deg_input <- join_dfs_wide(deg_input@analyses$diff)
 }
 
+change_columns <- parse_optional_vector(args$change_colname)
+signif_columns <- parse_optional_vector(args$signif_colname)
+if (is_table_input && is.null(signif_columns)) {
+  signif_columns <- deg_mixed_signif_columns(deg_input, change_columns)
+}
 resolved_columns <- MOSuite:::resolve_volcano_colnames(
   deg_input,
-  parse_optional_vector(args$change_colname),
-  parse_optional_vector(args$signif_colname)
+  change_columns,
+  signif_columns
 )
 selected_contrasts <- sub("_logFC$", "", resolved_columns$change_colname)
 export_statistics <- parse_optional_vector(args$add_deg_columns)
@@ -287,6 +293,13 @@ if (length(missing_columns)) {
     ". Supply these statistics or select compatible contrast, sorting, ",
     "and --add_deg_columns options.",
     call. = FALSE
+  )
+}
+if (is_table_input) {
+  deg_validate_statistics(
+    deg_input,
+    unique(c(resolved_columns$change_colname, resolved_columns$signif_colname)),
+    resolved_columns$signif_colname
   )
 }
 

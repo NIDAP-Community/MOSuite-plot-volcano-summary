@@ -15,6 +15,18 @@ deg_unique_file <- function(paths, label) {
   paths[[1L]]
 }
 
+deg_validate_statistics <- function(dat, columns, probability_columns = character()) {
+  for (column in columns) {
+    values <- dat[[column]]
+    if (!is.numeric(values) || any(!is.finite(values))) {
+      stop("DEG statistic must be finite and numeric: ", column, call. = FALSE)
+    }
+    if (column %in% probability_columns && any(values < 0 | values > 1)) {
+      stop("DEG p-values must be between 0 and 1: ", column, call. = FALSE)
+    }
+  }
+}
+
 deg_validate_table <- function(dat, feature_id_colname = NULL) {
   if (!is.data.frame(dat) || ncol(dat) < 2L || nrow(dat) == 0L) {
     stop(
@@ -51,19 +63,7 @@ deg_validate_table <- function(dat, feature_id_colname = NULL) {
       ),
       names(dat)
     )
-    for (column in columns) {
-      values <- dat[[column]]
-      if (!is.numeric(values) || any(!is.finite(values))) {
-        stop(
-          "DEG statistic must be finite and numeric: ",
-          column,
-          call. = FALSE
-        )
-      }
-      if (column %in% p_columns && any(values < 0 | values > 1)) {
-        stop("DEG p-values must be between 0 and 1: ", column, call. = FALSE)
-      }
-    }
+    deg_validate_statistics(dat, columns, p_columns)
   }
   # Put the chosen ID first: MOSuite's wide-table joins use the first column.
   dat <- dat[,
@@ -75,6 +75,31 @@ deg_validate_table <- function(dat, feature_id_colname = NULL) {
   ]
   dat[[feature_id_colname]] <- ids
   dat
+}
+
+deg_mixed_signif_columns <- function(dat, change_columns) {
+  if (is.null(change_columns)) {
+    change_columns <- grep("_logFC$", names(dat), value = TRUE)
+  }
+  if (!length(change_columns)) {
+    return(NULL)
+  }
+  contrasts <- sub("_logFC$", "", change_columns)
+  adjusted <- paste0(contrasts, "_adjpval")
+  unadjusted <- paste0(contrasts, "_pval")
+  if (all(adjusted %in% names(dat)) || all(unadjusted %in% names(dat))) {
+    return(NULL)
+  }
+  selected <- ifelse(adjusted %in% names(dat), adjusted, unadjusted)
+  if (!all(selected %in% names(dat))) {
+    return(NULL)
+  }
+  message(
+    "Using mixed adjusted and unadjusted significance columns: ",
+    paste(selected, collapse = ", "),
+    ". These values are not directly equivalent."
+  )
+  selected
 }
 
 load_deg_input <- function(

@@ -353,6 +353,96 @@ test_that("table and MOO CLI routes produce the same downstream artifacts", {
 })
 
 if (deg_capsule_name == "MOSuite-plot-volcano-summary") {
+  test_that("Summary validates explicitly selected table statistics", {
+    dat <- deg_fixture()[, c(
+      "GeneName", "B_X-A_X_logFC", "B_X-A_X_pval"
+    )]
+    dat[["B_X-A_X_qvalue"]] <- dat[["B_X-A_X_pval"]]
+    dat[["B_X-A_X_change"]] <- dat[["B_X-A_X_logFC"]]
+    extra <- c(
+      "--change_colname=B_X-A_X_change",
+      "--signif_colname=B_X-A_X_qvalue",
+      "--value_to_sort_the_output_dataset=fold-change",
+      "--add_deg_columns=none",
+      "--num_features_to_label=0",
+      "--image_width=3",
+      "--image_height=3",
+      "--dpi=72"
+    )
+    run <- deg_run_cli(dat, "table", extra)
+    on.exit(unlink(run$workspace, recursive = TRUE), add = TRUE)
+    result <- read.csv(file.path(
+      run$results, "moo", "volcano_summary_data.csv"
+    ))
+    expect_setequal(result$GeneName, c("gene1", "gene2", "gene6"))
+
+    bad <- dat
+    bad[["B_X-A_X_qvalue"]][1] <- -0.1
+    deg_run_cli(bad, "table", extra, "between 0 and 1: B_X-A_X_qvalue")
+    bad[["B_X-A_X_qvalue"]][1] <- 1.1
+    deg_run_cli(bad, "table", extra, "between 0 and 1: B_X-A_X_qvalue")
+    bad <- dat
+    bad[["B_X-A_X_qvalue"]][1] <- Inf
+    deg_run_cli(bad, "table", extra, "finite and numeric: B_X-A_X_qvalue")
+    bad <- dat
+    bad[["B_X-A_X_change"]] <- "invalid"
+    deg_run_cli(bad, "table", extra, "finite and numeric: B_X-A_X_change")
+  })
+
+  test_that("Summary detects mixed table significance columns only as fallback", {
+    dat <- deg_fixture()[, c(
+      "GeneName",
+      "B_X-A_X_logFC", "B_X-A_X_pval",
+      "B_X-C_X_logFC", "B_X-C_X_adjpval"
+    )]
+    expect_message(
+      selected <- deg_mixed_signif_columns(dat, NULL),
+      "mixed adjusted and unadjusted"
+    )
+    expect_identical(selected, c("B_X-A_X_pval", "B_X-C_X_adjpval"))
+    common <- dat
+    common[["B_X-C_X_pval"]] <- common[["B_X-C_X_adjpval"]]
+    expect_null(deg_mixed_signif_columns(common, NULL))
+    expect_null(deg_mixed_signif_columns(dat, "B_X-A_X_logFC"))
+    expect_null(deg_mixed_signif_columns(dat, "missing_logFC"))
+
+    extra <- c(
+      "--value_to_sort_the_output_dataset=fold-change",
+      "--add_deg_columns=none",
+      "--num_features_to_label=0",
+      "--image_width=3",
+      "--image_height=3",
+      "--dpi=72"
+    )
+    run <- deg_run_cli(dat, "table", extra)
+    on.exit(unlink(run$workspace, recursive = TRUE), add = TRUE)
+    result <- read.csv(file.path(
+      run$results, "moo", "volcano_summary_data.csv"
+    ))
+    expect_setequal(
+      result$GeneName[result$Contrast == "B_X-A_X"],
+      c("gene1", "gene2", "gene6")
+    )
+    expect_setequal(
+      result$GeneName[result$Contrast == "B_X-C_X"],
+      c("gene2", "gene3", "gene6")
+    )
+    expect_gt(file.info(file.path(
+      run$results, "figures", "diff", "volcano_summary.png"
+    ))$size, 0)
+    common[["B_X-C_X_pval"]] <- 0.9
+    common_run <- deg_run_cli(common, "table", extra)
+    on.exit(unlink(common_run$workspace, recursive = TRUE), add = TRUE)
+    common_result <- read.csv(file.path(
+      common_run$results, "moo", "volcano_summary_data.csv"
+    ))
+    expect_identical(unique(common_result$Contrast), "B_X-A_X")
+    deg_run_cli(
+      deg_table_to_moo(dat), "moo", extra,
+      expected_error = "Could not auto-detect significance columns"
+    )
+  })
+
   test_that("Summary rejects missing statistics before plotting", {
     dat <- deg_fixture()[, c(
       "GeneName",

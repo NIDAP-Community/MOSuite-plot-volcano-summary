@@ -15,7 +15,11 @@ deg_unique_file <- function(paths, label) {
   paths[[1L]]
 }
 
-deg_validate_statistics <- function(dat, columns, probability_columns = character()) {
+deg_validate_statistics <- function(
+  dat,
+  columns,
+  probability_columns = character()
+) {
   for (column in columns) {
     values <- dat[[column]]
     if (!is.numeric(values) || any(!is.finite(values))) {

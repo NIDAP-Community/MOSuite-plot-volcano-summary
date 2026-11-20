@@ -355,7 +355,9 @@ test_that("table and MOO CLI routes produce the same downstream artifacts", {
 if (deg_capsule_name == "MOSuite-plot-volcano-summary") {
   test_that("Summary validates explicitly selected table statistics", {
     dat <- deg_fixture()[, c(
-      "GeneName", "B_X-A_X_logFC", "B_X-A_X_pval"
+      "GeneName",
+      "B_X-A_X_logFC",
+      "B_X-A_X_pval"
     )]
     dat[["B_X-A_X_qvalue"]] <- dat[["B_X-A_X_pval"]]
     dat[["B_X-A_X_change"]] <- dat[["B_X-A_X_logFC"]]
@@ -372,7 +374,9 @@ if (deg_capsule_name == "MOSuite-plot-volcano-summary") {
     run <- deg_run_cli(dat, "table", extra)
     on.exit(unlink(run$workspace, recursive = TRUE), add = TRUE)
     result <- read.csv(file.path(
-      run$results, "moo", "volcano_summary_data.csv"
+      run$results,
+      "moo",
+      "volcano_summary_data.csv"
     ))
     expect_setequal(result$GeneName, c("gene1", "gene2", "gene6"))
 
@@ -392,8 +396,10 @@ if (deg_capsule_name == "MOSuite-plot-volcano-summary") {
   test_that("Summary detects mixed table significance columns only as fallback", {
     dat <- deg_fixture()[, c(
       "GeneName",
-      "B_X-A_X_logFC", "B_X-A_X_pval",
-      "B_X-C_X_logFC", "B_X-C_X_adjpval"
+      "B_X-A_X_logFC",
+      "B_X-A_X_pval",
+      "B_X-C_X_logFC",
+      "B_X-C_X_adjpval"
     )]
     expect_message(
       selected <- deg_mixed_signif_columns(dat, NULL),
@@ -417,7 +423,9 @@ if (deg_capsule_name == "MOSuite-plot-volcano-summary") {
     run <- deg_run_cli(dat, "table", extra)
     on.exit(unlink(run$workspace, recursive = TRUE), add = TRUE)
     result <- read.csv(file.path(
-      run$results, "moo", "volcano_summary_data.csv"
+      run$results,
+      "moo",
+      "volcano_summary_data.csv"
     ))
     expect_setequal(
       result$GeneName[result$Contrast == "B_X-A_X"],
@@ -427,18 +435,28 @@ if (deg_capsule_name == "MOSuite-plot-volcano-summary") {
       result$GeneName[result$Contrast == "B_X-C_X"],
       c("gene2", "gene3", "gene6")
     )
-    expect_gt(file.info(file.path(
-      run$results, "figures", "diff", "volcano_summary.png"
-    ))$size, 0)
+    expect_gt(
+      file.info(file.path(
+        run$results,
+        "figures",
+        "diff",
+        "volcano_summary.png"
+      ))$size,
+      0
+    )
     common[["B_X-C_X_pval"]] <- 0.9
     common_run <- deg_run_cli(common, "table", extra)
     on.exit(unlink(common_run$workspace, recursive = TRUE), add = TRUE)
     common_result <- read.csv(file.path(
-      common_run$results, "moo", "volcano_summary_data.csv"
+      common_run$results,
+      "moo",
+      "volcano_summary_data.csv"
     ))
     expect_identical(unique(common_result$Contrast), "B_X-A_X")
     deg_run_cli(
-      deg_table_to_moo(dat), "moo", extra,
+      deg_table_to_moo(dat),
+      "moo",
+      extra,
       expected_error = "Could not auto-detect significance columns"
     )
   })

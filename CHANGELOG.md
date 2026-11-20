@@ -1,5 +1,19 @@
 # Code Ocean capsule - MOSuite - Plot Volcano Summary
 
+## development version
+
+- Accept MOSuite DEG MOO or the specifically named `DEG_Analysis.csv`, with
+  automatic discovery that prefers MOO when both supported formats are
+  present. (#15, @TJoshMeyer)
+- Validate tabular DEG inputs and preserve existing plotting/output behavior.
+- Check required statistics against selected contrasts, sorting, and export
+  settings before plotting; allow reduced tables with compatible options and
+  keep standard errors optional unless selected for export. (#15, @TJoshMeyer)
+- Validate selected table columns and support mixed significance suffixes
+  across contrasts when no common suffix is available. (#15, @TJoshMeyer)
+- Preserve numeric-looking feature identifiers when reading DEG CSV files.
+  (#15, @TJoshMeyer)
+
 ## v6.0
 
 - Use MOSuite v0.5.0. (#10, @kelly-sovacool)

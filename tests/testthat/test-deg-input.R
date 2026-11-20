@@ -134,6 +134,26 @@ test_that("discovery prefers MOO and accepts only the named DEG CSV", {
   )
 })
 
+test_that("CSV loading preserves numeric-looking feature identifiers", {
+  root <- tempfile("deg-identifiers-")
+  dir.create(root)
+  on.exit(unlink(root, recursive = TRUE), add = TRUE)
+  dat <- deg_fixture()
+  dat$GeneName <- c("00123", "123", "1e10", sprintf("%05d", 4:12))
+  path <- file.path(root, "DEG_Analysis.csv")
+  write.csv(dat, path, row.names = FALSE)
+  loaded <- load_deg_input(data_dir = root)
+  expect_identical(loaded$GeneName, dat$GeneName)
+  expect_equal(loaded[["B_X-A_X_logFC"]], dat[["B_X-A_X_logFC"]])
+
+  reordered <- dat[, c("sample1", setdiff(names(dat), "sample1"))]
+  write.csv(reordered, path, row.names = FALSE)
+  loaded <- load_deg_input("GeneName", data_dir = root)
+  expect_identical(loaded$GeneName, dat$GeneName)
+  expect_identical(names(loaded)[[1L]], "GeneName")
+  expect_error(load_deg_input("missing", data_dir = root), "not found")
+})
+
 test_that("analysis-only MOO invents no counts or standard-deviation aliases", {
   dat <- deg_fixture()
   moo <- deg_table_to_moo(dat)
@@ -353,6 +373,23 @@ test_that("table and MOO CLI routes produce the same downstream artifacts", {
 })
 
 if (deg_capsule_name == "MOSuite-plot-volcano-summary") {
+  test_that("Summary retains numeric-looking IDs in output", {
+    dat <- deg_fixture()
+    dat$GeneName <- c("00123", "123", "1e10", sprintf("%05d", 4:12))
+    run <- deg_run_cli(dat, "table", c(
+      "--num_features_to_label=0",
+      "--image_width=3",
+      "--image_height=3",
+      "--dpi=72"
+    ))
+    on.exit(unlink(run$workspace, recursive = TRUE), add = TRUE)
+    result <- read.csv(
+      file.path(run$results, "moo", "volcano_summary_data.csv"),
+      colClasses = c(GeneName = "character")
+    )
+    expect_true(all(c("00123", "123", "1e10") %in% result$GeneName))
+  })
+
   test_that("Summary validates explicitly selected table statistics", {
     dat <- deg_fixture()[, c(
       "GeneName",

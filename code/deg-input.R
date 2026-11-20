@@ -144,7 +144,23 @@ load_deg_input <- function(
   }
 
   message("Reading table DEG input from ", path)
-  dat <- utils::read.csv(path, check.names = FALSE, stringsAsFactors = FALSE)
+  header <- utils::read.csv(path, nrows = 0, check.names = FALSE)
+  id_column <- if (is.null(feature_id_colname)) {
+    names(header)[[1L]]
+  } else {
+    feature_id_colname
+  }
+  col_classes <- rep(NA_character_, ncol(header))
+  id_index <- match(id_column, names(header))
+  if (!is.na(id_index)) {
+    col_classes[[id_index]] <- "character"
+  }
+  dat <- utils::read.csv(
+    path,
+    check.names = FALSE,
+    stringsAsFactors = FALSE,
+    colClasses = col_classes
+  )
   deg_validate_table(dat, feature_id_colname)
 }
 

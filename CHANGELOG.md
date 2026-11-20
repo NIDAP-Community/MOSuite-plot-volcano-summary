@@ -11,6 +11,8 @@
   keep standard errors optional unless selected for export. (#15, @TJoshMeyer)
 - Validate selected table columns and support mixed significance suffixes
   across contrasts when no common suffix is available. (#15, @TJoshMeyer)
+- Preserve numeric-looking feature identifiers when reading DEG CSV files.
+  (#15, @TJoshMeyer)
 
 ## v6.0
 

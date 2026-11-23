@@ -18,7 +18,8 @@ test_that("summary volcano capsule keeps expected CLI parameter contract", {
   # their own CLI flags:
   #   - add_features is derived from whether custom_gene_list is non-empty
   #   - flip_vplot is hardcoded to FALSE
-  #   - graphics_device/print_plots/save_plots/plots_subdir are capsule internals
+  #   - graphics_device/print_plots/save_plots/plots_subdir are capsule
+  #     internals
   not_exposed_by_design <- c(
     "add_features",
     "flip_vplot",
@@ -33,15 +34,18 @@ test_that("summary volcano capsule keeps expected CLI parameter contract", {
     not_exposed_by_design
   )
 
-  expect_same_values(extract_main_arguments(main_lines), expected_args)
+  expect_same_values(
+    extract_main_arguments(main_lines),
+    expected_args
+  )
   expect_match(main_text, "plot_volcano_summary\\(")
   expect_match(
     main_text,
-    "signif_colname = parse_optional_vector\\(args\\$signif_colname\\)"
+    "signif_colname = resolved_columns\\$signif_colname"
   )
   expect_match(
     main_text,
-    "change_colname = parse_optional_vector\\(args\\$change_colname\\)"
+    "change_colname = resolved_columns\\$change_colname"
   )
   expect_match(main_text, "label_font_size = args\\$label_font_size")
   expect_match(main_text, "draw_connectors = args\\$draw_connectors")

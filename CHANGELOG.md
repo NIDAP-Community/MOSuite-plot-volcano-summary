@@ -2,17 +2,16 @@
 
 ## development version
 
-- Accept MOSuite DEG MOO or the specifically named `DEG_Analysis.csv`, with
-  automatic discovery that prefers MOO when both supported formats are
-  present. (#15, @TJoshMeyer)
-- Validate tabular DEG inputs and preserve existing plotting/output behavior.
-- Check required statistics against selected contrasts, sorting, and export
-  settings before plotting; allow reduced tables with compatible options and
-  keep standard errors optional unless selected for export. (#15, @TJoshMeyer)
-- Validate selected table columns and support mixed significance suffixes
-  across contrasts when no common suffix is available. (#15, @TJoshMeyer)
-- Preserve numeric-looking feature identifiers when reading DEG CSV files.
-  (#15, @TJoshMeyer)
+- Improve DEG input handling and validation. (#15, @TJoshMeyer)
+  - Accept MOSuite multiOmicDataSet (MOO) DEG results or a CSV named
+    `DEG_Analysis.csv`, with automatic discovery that prefers MOO when both
+    formats are present.
+  - Validate tabular DEG inputs while preserving existing plotting behavior
+    and numeric-looking feature identifiers.
+  - Check required statistics against selected contrasts, sorting, and export
+    settings; allow reduced tables with compatible options.
+  - Support mixed significance columns across contrasts when no common suffix
+    is available.
 
 ## v6.0
 
